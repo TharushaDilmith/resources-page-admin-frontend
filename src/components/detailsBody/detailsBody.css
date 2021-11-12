@@ -1,0 +1,13 @@
+.viewTable-header {
+  margin-bottom: 20px;
+}
+.viewTable-header button {
+  background-color: white;
+  border: none;
+  border-radius: 5px;
+  padding: 10px 20px;
+  color: var(--main-color);
+  font-weight: 600;
+  cursor: pointer;
+  border: 1px solid var(--main-color);
+}
