@@ -180,7 +180,7 @@ export default function AwardingBody() {
 
       <DialogBox
         open={openDeleteDialogBox}
-        handleClose={()=>setOpenDeleteDialogBox(false)}
+        handleClose={() => setOpenDeleteDialogBox(false)}
         onClickDelete={deleteAwardingBody}
         message={"This will delete awarding body permanently!"}
       />

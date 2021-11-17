@@ -26,7 +26,7 @@
     border-radius: 10px;
     cursor: pointer;
 }
-.pdf-container{
+.pdf_container{
     width: 200px;
     background: #fff;
     display: flex;
@@ -34,5 +34,11 @@
     justify-content: center;
     flex-direction: row;
     margin-left: 90px;
+    margin-top: 30px;
+    
 
+}
+
+.pdf_container input{
+    margin-left: 5px;
 }

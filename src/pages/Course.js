@@ -1,17 +1,18 @@
 import { Button, IconButton } from "@material-ui/core";
-import { Delete, Edit } from "@material-ui/icons";
+import { Delete, Edit, GetApp } from "@material-ui/icons";
 import axios from "axios";
 import React, { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 import CourseForm from "../components/courseForm/CourseForm";
 import DetailsBody from "../components/detailsBody/DetailsBody";
+import DialogBox from "../components/DialogBox";
 import PopupBody from "../components/PopupBody";
 
 const initialState = {
-  id: "",
   course_name: "",
   course_image: "",
-  course_pdf: "",
-  resoursetype_id: "",
+  course_url: "",
+  resourcetype_id: "",
   awardingbody_id: "",
 };
 
@@ -28,6 +29,9 @@ export default function Course() {
 
   //use state open popup
   const [openPopup, setOpenPopup] = React.useState(false);
+
+  //use state to store the edit popup
+  const [openDeleteDialogBox, setOpenDeleteDialogBox] = React.useState(false);
 
   //set the state of the selected course
   const [selectedCourse, setSelectedCourse] = useState([]);
@@ -48,6 +52,7 @@ export default function Course() {
       .get("/courses")
       .then((res) => {
         setCourse(res.data);
+        console.log(course);
       })
       .catch((err) => {
         console.log(err);
@@ -79,17 +84,71 @@ export default function Course() {
       });
   };
 
+  //add course
+  const addCourse = (e, course) => {
+    e.preventDefault();
+    console.log(course);
+    axios
+      .post("/course", course)
+      .then((res) => {
+        console.log(res);
+        getAllCourses();
+        setOpenPopup(false);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
+  //edit course
+  const editCourse = (e, course) => {
+    e.preventDefault();
+    axios
+      .put(`/course/${course.id}`, course)
+      .then((res) => {
+        console.log(res);
+        getAllCourses();
+        setEditOpenPopup(false);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
+  //on click delete
+  const onClickDelete = (data) => {
+    setSelectedCourse(data);
+    setOpenDeleteDialogBox(true);
+  };
+
+  //delete course
+  const deleteCourse = () => {
+    axios
+      .delete(`/course/${selectedCourse.id}`)
+      .then((res) => {
+        console.log(res);
+        getAllCourses();
+        setOpenDeleteDialogBox(false);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
   //onclick popup open
   const onClick = () => {
     setOpenPopup(true);
   };
 
-  //onClick delete
-  const onClickDelete = (id) => {};
   //onClick edit
   const onClickEdit = (data) => {
     setSelectedCourse(data);
     setEditOpenPopup(true);
+  };
+
+  //onClick pdf
+  const onClickPDF = (data) => {
+    window.open(data);
   };
 
   //table columns
@@ -103,9 +162,41 @@ export default function Course() {
     },
     {
       field: "course_image",
-      headerName: "Course Image",
-      width: 180,
+      headerName: "Image",
+      minWidth: 150,
       editable: true,
+      renderCell: (params) => {
+        return (
+          <img
+            src={params.row.course_image}
+            alt="image"
+            style={{ width: "80px", height: "40px" }}
+          />
+        );
+      },
+    },
+    {
+      field: "course_pdf",
+      headerName: "PDF",
+      width: 200,
+      editable: false,
+      renderCell: (params) => {
+        return (
+          <>
+            
+              <Button
+                variant="contained"
+                color="default"
+                startIcon={<GetApp />}
+                style={{ marginLeft: "20px", marginRight: "30px" }}
+                onClick={() => onClickPDF(params.row.course_url)}
+              >
+                PDF
+              </Button>
+            
+          </>
+        );
+      },
     },
     {
       field: "action",
@@ -124,7 +215,7 @@ export default function Course() {
             >
               Edit
             </Button>
-            <IconButton onClick={() => onClickDelete(params.row.id)}>
+            <IconButton onClick={() => onClickDelete(params.row)}>
               <Delete color="secondary" />
             </IconButton>
           </>
@@ -152,6 +243,7 @@ export default function Course() {
             awardingBodies={awardingBody}
             resourceTypes={resourceTypes}
             formClose={() => setOpenPopup(false)}
+            onSubmit={addCourse}
           />
         }
       />
@@ -165,8 +257,15 @@ export default function Course() {
             awardingBodies={awardingBody}
             resourceTypes={resourceTypes}
             formClose={() => setEditOpenPopup(false)}
+            onSubmit={editCourse}
           />
         }
+      />
+      <DialogBox
+        open={openDeleteDialogBox}
+        handleClose={() => setOpenDeleteDialogBox(false)}
+        onClickDelete={deleteCourse}
+        message={"This will delete course permanently!"}
       />
     </div>
   );

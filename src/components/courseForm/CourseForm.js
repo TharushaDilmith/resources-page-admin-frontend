@@ -10,17 +10,13 @@ import {
   MenuItem,
   Button,
 } from "@material-ui/core";
-// import { storage } from "../../firebase.js";
+import { storage } from "../../firebase";
 
 const useStyles = makeStyles((theme) => ({
   root: {
     "& .MuiFormControl-root": {
-      width: "80%",
+      width: "400px",
       margin: theme.spacing(2),
-    },
-    backdrop: {
-      zIndex: theme.zIndex.drawer + 1,
-      color: "#fff",
     },
   },
 }));
@@ -35,35 +31,65 @@ export default function CourseForm({
 }) {
   const [file, setfile] = useState(null);
   const [open, setOpen] = React.useState(false);
+  const [PDFFile, setPDFFile] = useState(null);
 
-  //   async function uploadFile(image) {
-  //     if (!image.name.match(/\.(jpg|jpeg|png|webp)$/)) {
-  //       alert("Select an valid image type");
-  //       setOpen(false);
-  //     } else {
-  //       let bucketName = "tableImages";
-  //       let uploadTask = storage.ref(`${bucketName}/${image.name}`).put(image);
-  //       await uploadTask.on(
-  //         "state_changed",
-  //         (snapshot) => {
-  //           console.log(snapshot);
-  //         },
-  //         (err) => {
-  //           console.log(err);
-  //         },
-  //         () => {
-  //           storage
-  //             .ref("tableImages")
-  //             .child(image.name)
-  //             .getDownloadURL()
-  //             .then((firebaseURl) => {
-  //               setValues({ ...values, image: firebaseURl });
-  //               setOpen(false);
-  //             });
-  //         }
-  //       );
-  //     }
-  //   }
+  async function uploadImage(image) {
+    if (!image.name.match(/\.(jpg|jpeg|png|webp)$/)) {
+      alert("Select an valid image type");
+      setOpen(false);
+    } else {
+      let bucketName = "courseImage";
+      let uploadTask = storage.ref(`${bucketName}/${image.name}`).put(image);
+      await uploadTask.on(
+        "state_changed",
+        (snapshot) => {
+          console.log(snapshot);
+        },
+        (err) => {
+          console.log(err);
+        },
+        () => {
+          storage
+            .ref("courseImage")
+            .child(image.name)
+            .getDownloadURL()
+            .then((firebaseURl) => {
+              setValues({ ...values, course_image: firebaseURl });
+              setOpen(false);
+            });
+        }
+      );
+    }
+  }
+
+  async function uploadPDF(pdf) {
+    if (!pdf.name.match(/\.(pdf)$/)) {
+      alert("Select an valid pdf type");
+      setOpen(false);
+    } else {
+      let bucketName = "coursePDF";
+      let uploadTask = storage.ref(`${bucketName}/${pdf.name}`).put(pdf);
+      await uploadTask.on(
+        "state_changed",
+        (snapshot) => {
+          console.log(snapshot);
+        },
+        (err) => {
+          console.log(err);
+        },
+        () => {
+          storage
+            .ref("coursePDF")
+            .child(pdf.name)
+            .getDownloadURL()
+            .then((firebaseURl) => {
+              setValues({ ...values, course_url: firebaseURl });
+              setOpen(false);
+            });
+        }
+      );
+    }
+  }
 
   const [values, setValues] = useState(data);
   const classes = useStyles();
@@ -75,15 +101,18 @@ export default function CourseForm({
   function onImageSelect(e) {
     setfile(e.target.files[0]);
 
-    uploadFile(e.target.files[0]);
+    uploadImage(e.target.files[0]);
   }
+  function onPDFSelect(e) {
+    setPDFFile(e.target.files[0]);
 
-  const uploadFile = (image) => {};
+    uploadPDF(e.target.files[0]);
+  }
 
   return (
     <div>
       <form className={classes.root} onSubmit={(e) => onSubmit(e, values)}>
-        <Grid container >
+        <Grid container>
           <Grid item xs={6}>
             <div className="image-container">
               <div className="preview-image">
@@ -106,6 +135,17 @@ export default function CourseForm({
                 id="file-1"
               />
             </div>
+            <div className="pdf_container">
+              <span>PDF</span>
+              <input
+                type="file"
+                className=""
+                onChange={onPDFSelect}
+                id="file-2"
+              />
+            </div>
+          </Grid>
+          <Grid item xs={6}>
             <TextField
               variant="outlined"
               name="course_name"
@@ -114,17 +154,6 @@ export default function CourseForm({
               onChange={handleInputChnage}
               required={true}
             />
-          </Grid>
-          <Grid item xs={6}>
-            {/* <div className="pdf_container">
-              <span>PDF</span>
-              <input
-                type="file"
-                className=""
-                onChange={onImageSelect}
-                id="file-1"
-              />
-            </div> */}
             <FormControl variant="outlined">
               <InputLabel>Awarding Body</InputLabel>
               <MuiSelect
