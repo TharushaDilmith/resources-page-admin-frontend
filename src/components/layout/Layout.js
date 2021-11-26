@@ -15,10 +15,18 @@ export default function Layout({ children }) {
         <div className="sidebar-menu">
           <ul>
             <li>
-              <Link to="/courses">
+            
+              <Link to="/admin/home">
                 {" "}
                 <span className="las la-bus"></span>
-                <span>Courses</span>
+                <span>Dashboard</span>
+              </Link>
+            </li>
+            <li>
+              <Link to="/resources">
+                {" "}
+                <span className="las la-bus"></span>
+                <span>Resources</span>
               </Link>
             </li>
 
@@ -34,6 +42,13 @@ export default function Layout({ children }) {
                 {" "}
                 <span className="las la-calendar"></span>
                 <span>Resources Types</span>
+              </Link>
+            </li>
+            <li>
+              <Link to="/courses">
+                {" "}
+                <span className="las la-calendar"></span>
+                <span>Courses</span>
               </Link>
             </li>
           </ul>

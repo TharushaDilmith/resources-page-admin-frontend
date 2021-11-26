@@ -6,6 +6,7 @@ import DetailsBody from "../components/detailsBody/DetailsBody";
 import DialogBox from "../components/DialogBox";
 import PopupBody from "../components/PopupBody";
 import ResourseTypeForm from "../components/ResourseTypeForm";
+import SnackbarFeedback from "../components/SnackbarFeedback";
 
 //initialize resourse type data
 const initialState = {
@@ -32,6 +33,24 @@ export default function ResourceType() {
   //use state to store the edit popup
   const [openDeleteDialogBox, setOpenDeleteDialogBox] = React.useState(false);
 
+  //use state to store the update success
+  const [updateSuccess, setUpdateSuccess] = useState(false);
+
+  //use state to store the delete success
+  const [deleteSuccess, setDeleteSuccess] = useState(false);
+
+  //use state to store the error
+  const [error, setError] = useState(false);
+
+  //use state to store the error message
+  const [errorMessage, setErrorMessage] = useState("");
+
+  //use state to store the success message
+  const [successMessage, setSuccessMessage] = useState("");
+
+  //use state to store the add success
+  const [addSuccess, setAddSuccess] = useState(false);
+
   //use effect to get data from the server
   useEffect(() => {
     getAllResourceTypes();
@@ -42,7 +61,6 @@ export default function ResourceType() {
     axios
       .get("/resource_types")
       .then((res) => {
-        
         setResourceTypes(res.data);
       })
       .catch((err) => {
@@ -56,9 +74,14 @@ export default function ResourceType() {
     axios
       .post("/resource_type", data)
       .then((res) => {
-       
-        getAllResourceTypes();
-        setOpenPopup(false);
+        if (res.data.success) {
+          getAllResourceTypes();
+          setOpenPopup(false);
+          setAddSuccess(true);
+        } else {
+          setError(true);
+          setErrorMessage(res.data.message);
+        }
       })
       .catch((err) => {
         console.log(err);
@@ -71,9 +94,14 @@ export default function ResourceType() {
     axios
       .put(`/resource_type/${selectedResourseType.id}`, data)
       .then((res) => {
-        
-        getAllResourceTypes();
-        setOpenEditPopup(false);
+        if (res.data.success) {
+          getAllResourceTypes();
+          setOpenEditPopup(false);
+          setUpdateSuccess(true);
+        } else {
+          setError(true);
+          setErrorMessage(res.data.message);
+        }
       })
       .catch((err) => {
         console.log(err);
@@ -85,8 +113,14 @@ export default function ResourceType() {
     axios
       .delete(`/resource_type/${selectedResourseType.id}}`)
       .then((res) => {
-        setOpenDeleteDialogBox(false);
-        getAllResourceTypes();
+        if (res.data.success) {
+          setOpenDeleteDialogBox(false);
+          getAllResourceTypes();
+          setDeleteSuccess(true);
+        } else {
+          setError(true);
+          setErrorMessage(res.data.message);
+        }
       })
       .catch((err) => {
         console.log(err);
@@ -184,6 +218,26 @@ export default function ResourceType() {
         handleClose={() => setOpenDeleteDialogBox(false)}
         onClickDelete={deleteResourceType}
         message={"This will delete resourse type permanently!"}
+      />
+
+      <SnackbarFeedback
+        open={addSuccess}
+        message={"Resource Type added successfully!"}
+        onClose={() => setAddSuccess(false)}
+        type="success"
+      />
+      <SnackbarFeedback
+        open={updateSuccess}
+        message={"Resource Type updated successfully!"}
+        onClose={() => setUpdateSuccess(false)}
+        type="success"
+      />
+
+      <SnackbarFeedback
+        open={deleteSuccess}
+        message={"Resource Type deleted successfully!"}
+        onClose={() => setDeleteSuccess(false)}
+        type="success"
       />
     </div>
   );

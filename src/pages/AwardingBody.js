@@ -1,11 +1,12 @@
 import { Button, IconButton } from "@material-ui/core";
 import { Delete, Edit } from "@material-ui/icons";
 import axios from "axios";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import AwardingBodyForm from "../components/AwardingBodyForm";
 import DetailsBody from "../components/detailsBody/DetailsBody";
 import DialogBox from "../components/DialogBox";
 import PopupBody from "../components/PopupBody";
+import SnackbarFeedback from "../components/SnackbarFeedback";
 
 //initialize awarding body data
 const initialState = {
@@ -33,6 +34,24 @@ export default function AwardingBody() {
 
   //use state to store the edit popup
   const [openDeleteDialogBox, setOpenDeleteDialogBox] = React.useState(false);
+
+  //use state to store the update success
+  const [updateSuccess, setUpdateSuccess] = useState(false);
+
+  //use state to store the delete success
+  const [deleteSuccess, setDeleteSuccess] = useState(false);
+
+  //use state to store the error
+  const [error, setError] = useState(false);
+
+  //use state to store the error message
+  const [errorMessage, setErrorMessage] = useState("");
+
+  //use state to store the success message
+  const [successMessage, setSuccessMessage] = useState("");
+
+  //use state to store the add success
+  const [addSuccess, setAddSuccess] = useState(false);
 
   //onclick open popup
   const onClickOpenPopup = () => {
@@ -75,8 +94,14 @@ export default function AwardingBody() {
     axios
       .post("/awarding_body", data)
       .then((res) => {
-        getAllAwardingBody();
-        setOpenPopup(false);
+        if (res.data.success) {
+          getAllAwardingBody();
+          setOpenPopup(false);
+          setAddSuccess(true);
+        } else {
+          setError(true);
+          setErrorMessage(res.data.message);
+        }
       })
       .catch((err) => {
         console.log(err);
@@ -89,8 +114,14 @@ export default function AwardingBody() {
     axios
       .put("/awarding_body/" + selectedAwardingBody.id, data)
       .then((res) => {
-        getAllAwardingBody();
-        setOpenEditPopup(false);
+        if (res.data.success) {
+          getAllAwardingBody();
+          setOpenEditPopup(false);
+          setUpdateSuccess(true);
+        } else {
+          setError(true);
+          setErrorMessage(res.data.message);
+        }
       })
       .catch((err) => {
         console.log(err);
@@ -102,8 +133,14 @@ export default function AwardingBody() {
     axios
       .delete("/awarding_body/" + selectedAwardingBody.id)
       .then((res) => {
-        setOpenDeleteDialogBox(false);
-        getAllAwardingBody();
+        if (res.data.success) {
+          setOpenDeleteDialogBox(false);
+          getAllAwardingBody();
+          setDeleteSuccess(true);
+        } else {
+          setError(true);
+          setErrorMessage(res.data.message);
+        }
       })
       .catch((err) => {
         console.log(err);
@@ -154,7 +191,7 @@ export default function AwardingBody() {
         button={true}
       />
       <PopupBody
-        title="Add Resourse Type"
+        title="Add Awarding Body"
         openPopup={openPopup}
         form={
           <AwardingBodyForm
@@ -166,7 +203,7 @@ export default function AwardingBody() {
         }
       />
       <PopupBody
-        title="Update Resourse Type"
+        title="Update Awarding Body"
         openPopup={openEditPopup}
         form={
           <AwardingBodyForm
@@ -183,6 +220,26 @@ export default function AwardingBody() {
         handleClose={() => setOpenDeleteDialogBox(false)}
         onClickDelete={deleteAwardingBody}
         message={"This will delete awarding body permanently!"}
+      />
+
+      <SnackbarFeedback
+        open={addSuccess}
+        message={"Awarding Body added successfully!"}
+        onClose={() => setAddSuccess(false)}
+        type="success"
+      />
+      <SnackbarFeedback
+        open={updateSuccess}
+        message={"Awarding Body updated successfully!"}
+        onClose={() => setUpdateSuccess(false)}
+        type="success"
+      />
+
+      <SnackbarFeedback
+        open={deleteSuccess}
+        message={"Awarding Body deleted successfully!"}
+        onClose={() => setDeleteSuccess(false)}
+        type="success"
       />
     </div>
   );

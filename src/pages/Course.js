@@ -1,118 +1,135 @@
 import { Button, IconButton } from "@material-ui/core";
-import { Delete, Edit, GetApp } from "@material-ui/icons";
+import { Delete, Edit } from "@material-ui/icons";
 import axios from "axios";
 import React, { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
-import CourseForm from "../components/courseForm/CourseForm";
 import DetailsBody from "../components/detailsBody/DetailsBody";
 import DialogBox from "../components/DialogBox";
 import PopupBody from "../components/PopupBody";
+import CourseForm from "../components/CourseForm";
+import SnackbarFeedback from "../components/SnackbarFeedback";
 
+//initialize resourse type data
 const initialState = {
+  id: "",
   course_name: "",
-  course_image: "",
-  course_url: "",
-  resourcetype_id: "",
-  awardingbody_id: "",
 };
 
 export default function Course() {
-  const [course, setCourse] = React.useState({});
   //use state to store the data
-  const [resourceTypes, setResourceTypes] = React.useState([]);
+  const [courses, setCourses] = React.useState([]);
 
-  //initialize the state
-  const [initialCourse, setInitialCourse] = React.useState(initialState);
+  //initial resourse type
+  const [initialCourse, setInitialCourse] = useState(initialState);
 
-  //use state to store the data
-  const [awardingBody, setAwardingBody] = React.useState([]);
-
-  //use state open popup
+  //use state to store the popup
   const [openPopup, setOpenPopup] = React.useState(false);
+
+  //use state to store the edit popup
+  const [openEditPopup, setOpenEditPopup] = React.useState(false);
+
+  //use state to store selected resourse type
+  const [selectedCourse, setSelectedCourse] = useState([]);
 
   //use state to store the edit popup
   const [openDeleteDialogBox, setOpenDeleteDialogBox] = React.useState(false);
 
-  //set the state of the selected course
-  const [selectedCourse, setSelectedCourse] = useState([]);
+  //use state to store the update success
+  const [updateSuccess, setUpdateSuccess] = useState(false);
 
-  //set the state of the edit open popup
-  const [editOpenPopup, setEditOpenPopup] = useState(false);
+  //use state to store the delete success
+  const [deleteSuccess, setDeleteSuccess] = useState(false);
 
-  //useEffect
+  //use state to store the error
+  const [error, setError] = useState(false);
+
+  //use state to store the error message
+  const [errorMessage, setErrorMessage] = useState("");
+
+  //use state to store the success message
+  const [successMessage, setSuccessMessage] = useState("");
+
+  //use state to store the add success
+  const [addSuccess, setAddSuccess] = useState(false);
+
+  //use effect to get data from the server
   useEffect(() => {
     getAllCourses();
-    getAllResourceTypes();
-    getAllAwardingBody();
   }, []);
 
-  // get all courses
+  //get all resource types
   const getAllCourses = () => {
     axios
       .get("/courses")
       .then((res) => {
-        setCourse(res.data);
-        console.log(course);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  };
-  //get all resource types
-  const getAllResourceTypes = () => {
-    axios
-      .get("/resource_types")
-      .then((res) => {
-        console.log(res.data);
-        setResourceTypes(res.data);
+        setCourses(res.data);
       })
       .catch((err) => {
         console.log(err);
       });
   };
 
-  //get all awarding body
-  const getAllAwardingBody = () => {
-    axios
-      .get("/awarding_bodies")
-      .then((res) => {
-        console.log(res.data);
-        setAwardingBody(res.data);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  };
-
-  //add course
-  const addCourse = (e, course) => {
-    e.preventDefault();
-    console.log(course);
-    axios
-      .post("/course", course)
-      .then((res) => {
-        console.log(res);
-        getAllCourses();
-        setOpenPopup(false);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  };
-
-  //edit course
-  const editCourse = (e, course) => {
+  //add new resource type
+  const addNewCourse = (e, data) => {
     e.preventDefault();
     axios
-      .put(`/course/${course.id}`, course)
+      .post("/course", data)
       .then((res) => {
-        console.log(res);
-        getAllCourses();
-        setEditOpenPopup(false);
+        if (res.data.success) {
+          getAllCourses();
+          setOpenPopup(false);
+          setAddSuccess(true);
+        } else {
+          setError(true);
+          setErrorMessage(res.data.message);
+        }
       })
       .catch((err) => {
         console.log(err);
       });
+  };
+
+  //edit resource type
+  const editCourse = (e, data) => {
+    e.preventDefault();
+    axios
+      .put(`/course/${selectedCourse.id}`, data)
+      .then((res) => {
+        if (res.data.success) {
+          getAllCourses();
+          setOpenEditPopup(false);
+          setUpdateSuccess(true);
+        } else {
+          alert(res.data.message);
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
+  //delete resource type
+  const deleteCourse = (id) => {
+    axios
+      .delete(`/course/${selectedCourse.id}}`)
+      .then((res) => {
+        if (res.data.success) {
+          setOpenDeleteDialogBox(false);
+          getAllCourses();
+          setDeleteSuccess(true);
+        } else {
+          alert(res.data.message);
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
+  //on click edit
+  const onClickEdit = (data) => {
+    setSelectedCourse(data);
+    console.log(data);
+    setOpenEditPopup(true);
   };
 
   //on click delete
@@ -121,34 +138,9 @@ export default function Course() {
     setOpenDeleteDialogBox(true);
   };
 
-  //delete course
-  const deleteCourse = () => {
-    axios
-      .delete(`/course/${selectedCourse.id}`)
-      .then((res) => {
-        console.log(res);
-        getAllCourses();
-        setOpenDeleteDialogBox(false);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  };
-
-  //onclick popup open
-  const onClick = () => {
+  //onclick open popup
+  const onClickOpenPopup = (id) => {
     setOpenPopup(true);
-  };
-
-  //onClick edit
-  const onClickEdit = (data) => {
-    setSelectedCourse(data);
-    setEditOpenPopup(true);
-  };
-
-  //onClick pdf
-  const onClickPDF = (data) => {
-    window.open(data);
   };
 
   //table columns
@@ -157,46 +149,8 @@ export default function Course() {
     {
       field: "course_name",
       headerName: "Course Name",
-      width: 180,
+      width: 250,
       editable: true,
-    },
-    {
-      field: "course_image",
-      headerName: "Image",
-      minWidth: 150,
-      editable: true,
-      renderCell: (params) => {
-        return (
-          <img
-            src={params.row.course_image}
-            alt="image"
-            style={{ width: "80px", height: "40px" }}
-          />
-        );
-      },
-    },
-    {
-      field: "course_pdf",
-      headerName: "PDF",
-      width: 200,
-      editable: false,
-      renderCell: (params) => {
-        return (
-          <>
-            
-              <Button
-                variant="contained"
-                color="default"
-                startIcon={<GetApp />}
-                style={{ marginLeft: "20px", marginRight: "30px" }}
-                onClick={() => onClickPDF(params.row.course_url)}
-              >
-                PDF
-              </Button>
-            
-          </>
-        );
-      },
     },
     {
       field: "action",
@@ -225,12 +179,12 @@ export default function Course() {
   ];
 
   return (
-    <div className="course">
+    <div className="Course">
       <DetailsBody
+        onClick={onClickOpenPopup}
         columns={columns}
-        rows={course}
+        rows={courses}
         button={true}
-        onClick={onClick}
       />
 
       <PopupBody
@@ -240,23 +194,19 @@ export default function Course() {
           <CourseForm
             buttonTitle="Add"
             data={initialCourse}
-            awardingBodies={awardingBody}
-            resourceTypes={resourceTypes}
             formClose={() => setOpenPopup(false)}
-            onSubmit={addCourse}
+            onSubmit={addNewCourse}
           />
         }
       />
       <PopupBody
-        title="Edit Course"
-        openPopup={editOpenPopup}
+        title="Update Course"
+        openPopup={openEditPopup}
         form={
           <CourseForm
             buttonTitle="Update"
             data={selectedCourse}
-            awardingBodies={awardingBody}
-            resourceTypes={resourceTypes}
-            formClose={() => setEditOpenPopup(false)}
+            formClose={() => setOpenEditPopup(false)}
             onSubmit={editCourse}
           />
         }
@@ -266,6 +216,25 @@ export default function Course() {
         handleClose={() => setOpenDeleteDialogBox(false)}
         onClickDelete={deleteCourse}
         message={"This will delete course permanently!"}
+      />
+
+      <SnackbarFeedback
+        open={updateSuccess}
+        message={"Course updated successfully!"}
+        onClose={() => setUpdateSuccess(false)}
+        type="success"
+      />
+      <SnackbarFeedback
+        open={deleteSuccess}
+        message={"Course deleted successfully!"}
+        onClose={() => setDeleteSuccess(false)}
+        type="success"
+      />
+      <SnackbarFeedback
+        open={addSuccess}
+        message={"Course added successfully!"}
+        onClose={() => setAddSuccess(false)}
+        type="success"
       />
     </div>
   );

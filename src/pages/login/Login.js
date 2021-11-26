@@ -26,8 +26,12 @@ export default function Login() {
       axios
         .post("/admin/login", values)
         .then((res) => {
-          localStorage.setItem("token", res.data.token);
+          if(res.data.success){
+          localStorage.setItem("token", res.data.data.token);
           history.push('admin/home');
+          }else{
+            alert(res.data.message);
+          }
         })
         .catch((err) => {
           console.log(err);
