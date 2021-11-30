@@ -33,6 +33,9 @@ export default function ResourceType() {
   //use state to store the edit popup
   const [openDeleteDialogBox, setOpenDeleteDialogBox] = React.useState(false);
 
+  //use state to store the restore dialog box
+  const [openRestoreDialogBox, setOpenRestoreDialogBox] = React.useState(false);
+
   //use state to store the update success
   const [updateSuccess, setUpdateSuccess] = useState(false);
 
@@ -145,6 +148,25 @@ export default function ResourceType() {
     setOpenPopup(true);
   };
 
+  //restore all resource types
+  const restoreResourceTypes = () => {
+    axios
+      .post("/resource_type/restore")
+      .then((res) => {
+        if (res.data.success) {
+          getAllResourceTypes();
+          setOpenRestoreDialogBox(false);
+        } else {
+          setError(true);
+          setErrorMessage(res.data.message);
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
+
   //table columns
   const columns = [
     { field: "id", headerName: "ID", width: 100 },
@@ -187,6 +209,8 @@ export default function ResourceType() {
         columns={columns}
         rows={resourceTypes}
         button={true}
+        restoreButtonText="Restore All"
+        onClickRestore={() => setOpenRestoreDialogBox(true)}
       />
 
       <PopupBody
@@ -218,6 +242,15 @@ export default function ResourceType() {
         handleClose={() => setOpenDeleteDialogBox(false)}
         onClickDelete={deleteResourceType}
         message={"This will delete resourse type permanently!"}
+        buttonText={"Delete"}
+      />
+
+      <DialogBox
+        open={openRestoreDialogBox}
+        handleClose={() => setOpenRestoreDialogBox(false)}
+        onClickDelete={restoreResourceTypes}
+        message={"This will restore all resource types!"}
+        buttonText={"Restore"}
       />
 
       <SnackbarFeedback

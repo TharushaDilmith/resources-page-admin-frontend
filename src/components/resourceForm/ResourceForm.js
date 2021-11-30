@@ -34,6 +34,8 @@ export default function ResourceForm({
   const [open, setOpen] = React.useState(false);
   const [PDFFile, setPDFFile] = useState(null);
 
+
+  //upload file
   async function uploadImage(image) {
     if (!image.name.match(/\.(jpg|jpeg|png|webp)$/)) {
       alert("Select a valid image type");

@@ -35,6 +35,9 @@ export default function AwardingBody() {
   //use state to store the edit popup
   const [openDeleteDialogBox, setOpenDeleteDialogBox] = React.useState(false);
 
+  //use state to store the restore dialog box
+  const [openRestoreDialogBox, setOpenRestoreDialogBox] = React.useState(false);
+
   //use state to store the update success
   const [updateSuccess, setUpdateSuccess] = useState(false);
 
@@ -147,6 +150,31 @@ export default function AwardingBody() {
       });
   };
 
+  //onclick restore award bodies
+  const onClickRestore = () => {
+    setOpenRestoreDialogBox(true);
+  };
+
+  //restore awarding bodies
+  const restoreAwardingBodies = () => {
+    axios
+      .post("/awarding_body/restore")
+
+      .then((res) => {
+        if (res.data.success) {
+          setOpenRestoreDialogBox(false);
+          getAllAwardingBody();
+          // setSuccessMessage(res.data.message);
+        } else {
+          setError(true);
+          setErrorMessage(res.data.message);
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
   //table columns
   const columns = [
     { field: "id", headerName: "ID", width: 100 },
@@ -189,6 +217,8 @@ export default function AwardingBody() {
         columns={columns}
         rows={awardingBody}
         button={true}
+        restoreButtonText="Restore All"
+        onClickRestore={onClickRestore}
       />
       <PopupBody
         title="Add Awarding Body"
@@ -220,6 +250,15 @@ export default function AwardingBody() {
         handleClose={() => setOpenDeleteDialogBox(false)}
         onClickDelete={deleteAwardingBody}
         message={"This will delete awarding body permanently!"}
+        buttonText="Delete"
+      />
+
+      <DialogBox
+        open={openRestoreDialogBox}
+        handleClose={() => setOpenRestoreDialogBox(false)}
+        onClickDelete={restoreAwardingBodies}
+        message={"This will restore all awarding bodies!"}
+        buttonText="Restore"
       />
 
       <SnackbarFeedback

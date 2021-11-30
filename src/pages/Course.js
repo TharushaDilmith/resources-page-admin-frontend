@@ -33,6 +33,9 @@ export default function Course() {
   //use state to store the edit popup
   const [openDeleteDialogBox, setOpenDeleteDialogBox] = React.useState(false);
 
+  //use state to store the restore dialog box
+  const [openRestoreDialogBox, setOpenRestoreDialogBox] = React.useState(false);
+
   //use state to store the update success
   const [updateSuccess, setUpdateSuccess] = useState(false);
 
@@ -143,6 +146,28 @@ export default function Course() {
     setOpenPopup(true);
   };
 
+  //onClick restore
+  const onClickRestore = () => {
+    setOpenRestoreDialogBox(true);
+  };
+
+  //restore all resource types
+  const restoreCourses = () => {
+    axios
+      .post("/course/restore")
+      .then((res) => {
+        if (res.data.success) {
+          getAllCourses();
+          setOpenRestoreDialogBox(false);
+        } else {
+          alert(res.data.message);
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
   //table columns
   const columns = [
     { field: "id", headerName: "ID", width: 100 },
@@ -185,6 +210,8 @@ export default function Course() {
         columns={columns}
         rows={courses}
         button={true}
+        restoreButtonText="Restore All"
+        onClickRestore={() => setOpenRestoreDialogBox(true)}
       />
 
       <PopupBody
@@ -216,6 +243,15 @@ export default function Course() {
         handleClose={() => setOpenDeleteDialogBox(false)}
         onClickDelete={deleteCourse}
         message={"This will delete course permanently!"}
+        buttonText="Delete"
+      />
+
+      <DialogBox
+        open={openRestoreDialogBox}
+        handleClose={() => setOpenRestoreDialogBox(false)}
+        onClickDelete={restoreCourses}
+        message={"This will restore all courses!"}
+        buttonText="Restore"
       />
 
       <SnackbarFeedback

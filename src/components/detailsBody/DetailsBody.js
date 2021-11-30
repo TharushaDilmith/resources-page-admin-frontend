@@ -1,16 +1,21 @@
 import React from "react";
 import { DataGrid } from "@material-ui/data-grid";
 import "./detailsBody.css";
+import { Button } from "@material-ui/core";
 
-
-export default function DetailsBody({ columns, rows, onClick, button }) {
+export default function DetailsBody({ columns, rows, onClick, button,restoreButtonText,onClickRestore }) {
   return (
     <div>
       <div className="viewTable-header">
         {button && (
-          <button onClick={(e) => onClick(e)} className="btn btn-primary">
-            Create
-          </button>
+          <div>
+            <button onClick={(e) => onClick(e)} className="btn btn-primary btn-create">
+              Create
+            </button>
+            <Button onClick={(e) => onClickRestore(e)} color="secondary" variant="contained">
+              {restoreButtonText}
+            </Button>
+          </div>
         )}
       </div>
 

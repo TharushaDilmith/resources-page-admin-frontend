@@ -29,6 +29,7 @@ export default function Login() {
           if(res.data.success){
           localStorage.setItem("token", res.data.data.token);
           history.push('admin/home');
+          window.location.reload();
           }else{
             alert(res.data.message);
           }

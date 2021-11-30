@@ -50,6 +50,9 @@ export default function Resource() {
   //use state to store the delete success
   const [deleteSuccess, setDeleteSuccess] = useState(false);
 
+  //use state to store the restore dialog box
+  const [openRestoreDialogBox, setOpenRestoreDialogBox] = React.useState(false);
+
   //use state to store the error
   const [error, setError] = useState(false);
 
@@ -204,6 +207,24 @@ export default function Resource() {
     window.open(data);
   };
 
+  //restore resources
+  const restoreResources = () => {
+    axios
+      .post("/resource/restore")
+      .then((res) => {
+        if (res.data.success) {
+          getAllresources();
+          setOpenRestoreDialogBox(false);
+        } else {
+          setError(true);
+          setErrorMessage(res.data.message);
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
   //table columns
   const columns = [
     { field: "id", headerName: "ID", width: 100 },
@@ -282,6 +303,8 @@ export default function Resource() {
         rows={resource}
         button={true}
         onClick={onClick}
+        restoreButtonText="Restore All"
+        onClickRestore={() => setOpenRestoreDialogBox(true)}
       />
 
       <PopupBody
@@ -319,6 +342,15 @@ export default function Resource() {
         handleClose={() => setOpenDeleteDialogBox(false)}
         onClickDelete={deleteResource}
         message={"This will delete resource permanently!"}
+        buttonText={"Delete"}
+      />
+
+      <DialogBox
+        open={openRestoreDialogBox}
+        handleClose={() => setOpenRestoreDialogBox(false)}
+        onClickDelete={restoreResources}
+        message={"This will restore all resources!"}
+        buttonText={"Restore"}
       />
 
       <SnackbarFeedback

@@ -6,7 +6,7 @@ import DialogContent from "@material-ui/core/DialogContent";
 import DialogContentText from "@material-ui/core/DialogContentText";
 import DialogTitle from "@material-ui/core/DialogTitle";
 
-export default function DialogBox({open,handleClose,onClickDelete,message}) {
+export default function DialogBox({open,handleClose,onClickDelete,message, buttonText}) {
   return (
     <Dialog
       open={open}
@@ -25,8 +25,8 @@ export default function DialogBox({open,handleClose,onClickDelete,message}) {
           Cancel
         </Button>
         <Button  color="primary" onClick={(e)=>onClickDelete()} autoFocus>
-          Delete
-        </Button>
+          {buttonText}
+          </Button>
       </DialogActions>
     </Dialog>
   );
