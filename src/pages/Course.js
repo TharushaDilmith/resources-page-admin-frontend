@@ -36,6 +36,10 @@ export default function Course() {
   //use state to store the restore dialog box
   const [openRestoreDialogBox, setOpenRestoreDialogBox] = React.useState(false);
 
+    //use state to store the restore single success dialog box
+    const [singleRestoreSuccess, setSingleRestoreSuccess] = useState(false);
+
+
   //use state to store the update success
   const [updateSuccess, setUpdateSuccess] = useState(false);
 
@@ -78,13 +82,27 @@ export default function Course() {
   //get all deleted courses
   const getAllDeletedCourses = () => {
     axios
-      .get("/courses/deleted")
+      .get("/course/deleted")
       .then((res) => {
         setDeletedCourse(res.data);
       })
       .catch((err) => {
         console.log(err);
       });
+  };
+
+  //restore single course
+  const restoreSingleCourse = (id) => {
+    try {
+      axios.post("/course/restore/" + id).then((res) => {
+        console.log("done");
+       getAllDeletedCourses();
+        getAllCourses();
+        setSingleRestoreSuccess(true);
+      });
+    } catch (error) {
+      console.log(error);
+    }
   };
 
 
@@ -134,6 +152,7 @@ export default function Course() {
       .then((res) => {
         if (res.data.success) {
           setOpenDeleteDialogBox(false);
+          getAllDeletedCourses();
           getAllCourses();
           setDeleteSuccess(true);
         } else {
@@ -168,7 +187,7 @@ export default function Course() {
     setOpenRestoreDialogBox(true);
   };
 
-  //restore all resource types
+  //restore all courses
   const restoreCourses = () => {
     axios
       .post("/course/restore")
@@ -242,7 +261,7 @@ export default function Course() {
               color="secondary"
               startIcon={<Edit />}
               style={{ marginLeft: "20px", marginRight: "30px" }}
-              // onClick={() => onClickEdit(params.row)}
+              onClick={() => restoreSingleCourse(params.row.id)}
             >
               Restore
             </Button>
@@ -323,6 +342,12 @@ export default function Course() {
         open={addSuccess}
         message={"Course added successfully!"}
         onClose={() => setAddSuccess(false)}
+        type="success"
+      />
+      <SnackbarFeedback
+        open={singleRestoreSuccess}
+        message={"Course restored successfully!"}
+        onClose={() => setSingleRestoreSuccess(false)}
         type="success"
       />
     </div>

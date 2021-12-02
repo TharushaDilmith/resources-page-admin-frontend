@@ -38,6 +38,17 @@ export default function AwardingBody() {
   //use state to store the restore dialog box
   const [openRestoreDialogBox, setOpenRestoreDialogBox] = React.useState(false);
 
+  //use state to store the single restore dialog box
+  const [openSingleRestoreDialogBox, setOpenSingleRestoreDialogBox] =
+    useState(false);
+
+  //seeleted restore award body id
+  const [selectedRestoreAwardingBodyId, setSelectedRestoreAwardingBodyId] =
+    useState("");
+
+  //use state to store the restore single success dialog box
+  const [singleRestoreSuccess, setSingleRestoreSuccess] = useState(false);
+
   //use state to store the update success
   const [updateSuccess, setUpdateSuccess] = useState(false);
 
@@ -75,7 +86,6 @@ export default function AwardingBody() {
     axios
       .get("/awarding_bodies")
       .then((res) => {
-        console.log(res.data);
         setAwardingBody(res.data);
       })
       .catch((err) => {
@@ -142,6 +152,7 @@ export default function AwardingBody() {
       .then((res) => {
         if (res.data.success) {
           setOpenDeleteDialogBox(false);
+          getTrashedAwardingBodies();
           getAllAwardingBody();
           setDeleteSuccess(true);
         } else {
@@ -191,13 +202,20 @@ export default function AwardingBody() {
       });
   };
 
-  //onclick restore award bodies
-  const onClickRestoreAwardingBody = (id) => {
+  // //onclick single restore single award body
+  // const onClickRestoreSingleAwardingBody = (id) => {
+  //   setSelectedRestoreAwardingBodyId(id);
+  //   setOpenSingleRestoreDialogBox(true);
+  // };
+
+  //restore single award body
+  const restoreSingleAwardingBody = (id) => {
     try {
       axios.post("/awarding_body/restore/" + id).then((res) => {
         console.log("done");
         getTrashedAwardingBodies();
         getAllAwardingBody();
+        setSingleRestoreSuccess(true);
       });
     } catch (error) {
       console.log(error);
@@ -261,7 +279,7 @@ export default function AwardingBody() {
               color="secondary"
               startIcon={<Edit />}
               style={{ marginLeft: "20px", marginRight: "30px" }}
-              onClick={() => onClickRestoreAwardingBody(params.row.id)}
+              onClick={() => restoreSingleAwardingBody(params.row.id)}
             >
               Restore
             </Button>
@@ -323,6 +341,14 @@ export default function AwardingBody() {
         message={"This will restore all awarding bodies!"}
         buttonText="Restore"
       />
+      {/* 
+      <DialogBox
+        open={openSingleRestoreDialogBox}
+        handleClose={() => setOpenSingleRestoreDialogBox(false)}
+        onClickDelete={restoreSingleAwardingBody}
+        message={"This will restore this awarding body!"}
+        buttonText="Restore"
+      /> */}
 
       <SnackbarFeedback
         open={addSuccess}
@@ -341,6 +367,13 @@ export default function AwardingBody() {
         open={deleteSuccess}
         message={"Awarding Body deleted successfully!"}
         onClose={() => setDeleteSuccess(false)}
+        type="success"
+      />
+
+      <SnackbarFeedback
+        open={singleRestoreSuccess}
+        message={"Awarding Body restored successfully!"}
+        onClose={() => setSingleRestoreSuccess(false)}
         type="success"
       />
     </div>

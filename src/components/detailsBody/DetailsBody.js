@@ -25,7 +25,7 @@ export default function DetailsBody({
   }
   useEffect(() => {
     handleClick();
-  }, [columns, rows]);
+  }, [columns, rows,deletedColumns,deletedRows]);
 
   //onclick restore row
   const handleRestore = () => {

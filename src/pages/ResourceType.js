@@ -18,6 +18,9 @@ export default function ResourceType() {
   //use state to store the data
   const [resourceTypes, setResourceTypes] = React.useState([]);
 
+  //use state to store deleted resource type
+  const [deletedResourceType, setDeletedResourceType] = useState();
+
   //initial resourse type
   const [initialResourseType, setInitialResourseType] = useState(initialState);
 
@@ -51,12 +54,16 @@ export default function ResourceType() {
   //use state to store the success message
   const [successMessage, setSuccessMessage] = useState("");
 
+  //use state to store the restore single success dialog box
+  const [singleRestoreSuccess, setSingleRestoreSuccess] = useState(false);
+
   //use state to store the add success
   const [addSuccess, setAddSuccess] = useState(false);
 
   //use effect to get data from the server
   useEffect(() => {
     getAllResourceTypes();
+    getAllDeletedResourceTypes();
   }, []);
 
   //get all resource types
@@ -65,6 +72,19 @@ export default function ResourceType() {
       .get("/resource_types")
       .then((res) => {
         setResourceTypes(res.data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
+  //get all deleted resource types
+  const getAllDeletedResourceTypes = () => {
+    axios
+      .get("/resource_type/deleted")
+      .then((res) => {
+        console.log(res.data);
+        setDeletedResourceType(res.data);
       })
       .catch((err) => {
         console.log(err);
@@ -118,6 +138,7 @@ export default function ResourceType() {
       .then((res) => {
         if (res.data.success) {
           setOpenDeleteDialogBox(false);
+          getAllDeletedResourceTypes();
           getAllResourceTypes();
           setDeleteSuccess(true);
         } else {
@@ -166,6 +187,19 @@ export default function ResourceType() {
       });
   };
 
+  //restore single resource type
+  const restoreSingleResourceType = (id) => {
+    try {
+      axios.post("/resource_type/restore/" + id).then((res) => {
+        console.log("done");
+        getAllDeletedResourceTypes();
+        getAllResourceTypes();
+        setSingleRestoreSuccess(true);
+      });
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   //table columns
   const columns = [
@@ -202,12 +236,46 @@ export default function ResourceType() {
     },
   ];
 
+  //deleted resource type table columns
+  const deletedColumns = [
+    { field: "id", headerName: "ID", width: 100 },
+    {
+      field: "resource_type_name",
+      headerName: "Resource Type Name",
+      width: 250,
+      editable: true,
+    },
+    {
+      field: "action",
+      headerName: "Action",
+      width: 200,
+      editable: false,
+      renderCell: (params) => {
+        return (
+          <>
+            <Button
+              variant="contained"
+              color="secondary"
+              startIcon={<Edit />}
+              style={{ marginLeft: "20px", marginRight: "30px" }}
+              onClick={() => restoreSingleResourceType(params.row.id)}
+            >
+              Restore
+            </Button>
+          </>
+        );
+      },
+    },
+  ];
+
   return (
     <div className="ResourceType">
       <DetailsBody
         onClick={onClickOpenPopup}
         columns={columns}
         rows={resourceTypes}
+        deletedColumns={deletedColumns}
+        deletedRows={deletedResourceType}
         button={true}
         restoreButtonText="Restore All"
         onClickRestore={() => setOpenRestoreDialogBox(true)}
@@ -270,6 +338,13 @@ export default function ResourceType() {
         open={deleteSuccess}
         message={"Resource Type deleted successfully!"}
         onClose={() => setDeleteSuccess(false)}
+        type="success"
+      />
+
+      <SnackbarFeedback
+        open={singleRestoreSuccess}
+        message={"Resource type restored successfully!"}
+        onClose={() => setSingleRestoreSuccess(false)}
         type="success"
       />
     </div>

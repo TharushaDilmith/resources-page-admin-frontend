@@ -1,10 +1,34 @@
-import React, { useState } from "react";
+import React, { useState} from "react";
 import { Link } from "react-router-dom";
 import "./layout.css";
+import { useHistory } from "react-router";
+import DialogBox from "../DialogBox";
 
 export default function Layout({ children }) {
+
+  //uee state for dialog box
+  const [open, setOpen] = useState(false);
+
+  //useHistory() is a hook that lets you listen to the history stack.
+  const history = useHistory();
+
+  //logout
+  const  logout = () => {
+    localStorage.removeItem("token");
+    history.push("/");
+    window.location.reload();
+    
+
+  }
   return (
     <div>
+      <DialogBox
+        open={open}
+        handleClose={() => setOpen(false)}
+        onClickDelete={logout}
+        message={"Do you want to logout!"}
+        buttonText={"Logout"}
+      />
       <input type="checkbox" name="" id="nav-toggle" />
       <div className="sidebar">
         <div className="sidebar-brand">
@@ -50,6 +74,13 @@ export default function Layout({ children }) {
                 <span>Resources</span>
               </Link>
             </li>
+            <li>
+              <Link onClick={() => {setOpen(true) }}to="#" >
+                {" "}
+                <span className="las la-bus"></span>
+                <span>Logout</span>
+              </Link>
+            </li>
           </ul>
         </div>
       </div>
@@ -72,7 +103,7 @@ export default function Layout({ children }) {
               height="40px"
             />
             <div className="">
-              <h4>Admin Name</h4>
+              <h4>{localStorage.getItem("user")}</h4>
               <small>Admin</small>
             </div>
           </div>
