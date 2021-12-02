@@ -54,9 +54,13 @@ export default function Course() {
   //use state to store the add success
   const [addSuccess, setAddSuccess] = useState(false);
 
+  //use state to store the deleted course
+  const [deletedCourse, setDeletedCourse] = useState([]);
+
   //use effect to get data from the server
   useEffect(() => {
     getAllCourses();
+    getAllDeletedCourses();
   }, []);
 
   //get all resource types
@@ -70,6 +74,19 @@ export default function Course() {
         console.log(err);
       });
   };
+
+  //get all deleted courses
+  const getAllDeletedCourses = () => {
+    axios
+      .get("/courses/deleted")
+      .then((res) => {
+        setDeletedCourse(res.data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
 
   //add new resource type
   const addNewCourse = (e, data) => {
@@ -203,12 +220,48 @@ export default function Course() {
     },
   ];
 
+  //trashed resource types table columns
+  const deletedColumns = [
+    { field: "id", headerName: "ID", width: 100 },
+    {
+      field: "course_name",
+      headerName: "Course Name",
+      width: 250,
+      editable: true,
+    },
+    {
+      field: "action",
+      headerName: "Action",
+      width: 200,
+      editable: false,
+      renderCell: (params) => {
+        return (
+          <>
+            <Button
+              variant="contained"
+              color="secondary"
+              startIcon={<Edit />}
+              style={{ marginLeft: "20px", marginRight: "30px" }}
+              // onClick={() => onClickEdit(params.row)}
+            >
+              Restore
+            </Button>
+            
+          </>
+        );
+      },
+    },
+  ];
+
+
   return (
     <div className="Course">
       <DetailsBody
         onClick={onClickOpenPopup}
         columns={columns}
         rows={courses}
+        deletedColumns={deletedColumns}
+        deletedRows={deletedCourse}
         button={true}
         restoreButtonText="Restore All"
         onClickRestore={() => setOpenRestoreDialogBox(true)}

@@ -296,11 +296,81 @@ export default function Resource() {
     },
   ];
 
+  //deleted resources table columns
+  const deletedColumns = [
+    { field: "id", headerName: "ID", width: 100 },
+    {
+      field: "resource_name",
+      headerName: "Resource Name",
+      width: 180,
+      editable: true,
+    },
+    {
+      field: "resource_image",
+      headerName: "Image",
+      minWidth: 150,
+      editable: true,
+      renderCell: (params) => {
+        return (
+          <img
+            src={params.row.resource_image}
+            alt="image"
+            style={{ width: "80px", height: "40px" }}
+          />
+        );
+      },
+    },
+    {
+      field: "resource_url",
+      headerName: "PDF",
+      width: 200,
+      editable: false,
+      renderCell: (params) => {
+        return (
+          <>
+            <Button
+              variant="contained"
+              color="default"
+              startIcon={<GetApp />}
+              style={{ marginLeft: "20px", marginRight: "30px" }}
+              onClick={() => onClickPDF(params.row.resource_url)}
+            >
+              PDF
+            </Button>
+          </>
+        );
+      },
+    },
+    {
+      field: "action",
+      headerName: "Action",
+      width: 200,
+      editable: false,
+      renderCell: (params) => {
+        return (
+          <>
+            <Button
+              variant="contained"
+              color="primary"
+              startIcon={<Edit />}
+              style={{ marginLeft: "20px", marginRight: "30px" }}
+              // onClick={() => onClickEdit(params.row)}
+            >
+              Restore
+            </Button>
+            
+          </>
+        );
+      },
+    },
+  ];
+
   return (
     <div className="resource">
       <DetailsBody
         columns={columns}
         rows={resource}
+        deletedColumns={deletedColumns}
         button={true}
         onClick={onClick}
         restoreButtonText="Restore All"
