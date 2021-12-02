@@ -53,6 +53,12 @@ export default function Resource() {
   //use state to store the restore dialog box
   const [openRestoreDialogBox, setOpenRestoreDialogBox] = React.useState(false);
 
+  //use state to store the deleted resource
+  const [deletedResource, setDeletedResource] = useState([]);
+
+  //use state to store the restore single success dialog box
+  const [singleRestoreSuccess, setSingleRestoreSuccess] = useState(false);
+
   //use state to store the error
   const [error, setError] = useState(false);
 
@@ -71,6 +77,7 @@ export default function Resource() {
     getAllResourceTypes();
     getAllAwardingBody();
     getAllCourses();
+    getAllDeletedResources();
   }, []);
 
   // get all resources
@@ -79,18 +86,30 @@ export default function Resource() {
       .get("/resources")
       .then((res) => {
         setResource(res.data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
+  //get all deleted resources
+  const getAllDeletedResources = () => {
+    axios
+      .get("/resource/deleted")
+      .then((res) => {
+        setDeletedResource(res.data);
         console.log(res.data);
       })
       .catch((err) => {
         console.log(err);
       });
   };
+
   //get all resource types
   const getAllResourceTypes = () => {
     axios
       .get("/resource_types")
       .then((res) => {
-        console.log(res.data);
         setResourceTypes(res.data);
       })
       .catch((err) => {
@@ -103,7 +122,6 @@ export default function Resource() {
     axios
       .get("/awarding_bodies")
       .then((res) => {
-        console.log(res.data);
         setAwardingBody(res.data);
       })
       .catch((err) => {
@@ -116,7 +134,6 @@ export default function Resource() {
     axios
       .get("/courses")
       .then((res) => {
-        console.log(res.data);
         setCourses(res.data);
       })
       .catch((err) => {
@@ -178,6 +195,7 @@ export default function Resource() {
       .delete(`/resource/${selectedResource.id}`)
       .then((res) => {
         if (res.data.success) {
+          getAllDeletedResources();
           getAllresources();
           setOpenDeleteDialogBox(false);
           setDeleteSuccess(true);
@@ -223,6 +241,19 @@ export default function Resource() {
       .catch((err) => {
         console.log(err);
       });
+  };
+  //restore single course
+  const restoreSingleResource = (id) => {
+    try {
+      axios.post("/resource/restore/" + id).then((res) => {
+        console.log("done");
+        getAllDeletedResources();
+        getAllresources();
+        setSingleRestoreSuccess(true);
+      });
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   //table columns
@@ -351,14 +382,13 @@ export default function Resource() {
           <>
             <Button
               variant="contained"
-              color="primary"
+              color="secondary"
               startIcon={<Edit />}
               style={{ marginLeft: "20px", marginRight: "30px" }}
-              // onClick={() => onClickEdit(params.row)}
+              onClick={() => restoreSingleResource(params.row.id)}
             >
               Restore
             </Button>
-            
           </>
         );
       },
@@ -371,6 +401,7 @@ export default function Resource() {
         columns={columns}
         rows={resource}
         deletedColumns={deletedColumns}
+        deletedRows={deletedResource}
         button={true}
         onClick={onClick}
         restoreButtonText="Restore All"
@@ -440,6 +471,12 @@ export default function Resource() {
         open={deleteSuccess}
         message={"Resource deleted successfully!"}
         onClose={() => setDeleteSuccess(false)}
+        type="success"
+      />
+      <SnackbarFeedback
+        open={singleRestoreSuccess}
+        message={"Resource restored successfully!"}
+        onClose={() => setSingleRestoreSuccess(false)}
         type="success"
       />
     </div>

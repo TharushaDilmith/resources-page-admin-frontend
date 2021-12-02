@@ -27,6 +27,7 @@ export default function Login() {
         .post("/admin/login", values)
         .then((res) => {
           if(res.data.success){
+            localStorage.setItem("user", res.data.data.user);
           localStorage.setItem("token", res.data.data.token);
           history.push('admin/home');
           window.location.reload();
