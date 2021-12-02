@@ -56,6 +56,9 @@ export default function AwardingBody() {
   //use state to store the add success
   const [addSuccess, setAddSuccess] = useState(false);
 
+  //use state to store the trashed award body
+  const [trashedAwardingBody, setTrashedAwardingBody] = useState([]);
+
   //onclick open popup
   const onClickOpenPopup = () => {
     setOpenPopup(true);
@@ -64,6 +67,7 @@ export default function AwardingBody() {
   //use effect to get data from api
   useEffect(() => {
     getAllAwardingBody();
+    getTrashedAwardingBodies();
   }, []);
 
   //get all awarding body
@@ -175,6 +179,31 @@ export default function AwardingBody() {
       });
   };
 
+  //get trashed awarding bodies
+  const getTrashedAwardingBodies = () => {
+    axios
+      .get("/awarding_body/deleted")
+      .then((res) => {
+        setTrashedAwardingBody(res.data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
+  //onclick restore award bodies
+  const onClickRestoreAwardingBody = (id) => {
+    try {
+      axios.post("/awarding_body/restore/" + id).then((res) => {
+        console.log("done");
+        getTrashedAwardingBodies();
+        getAllAwardingBody();
+      });
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   //table columns
   const columns = [
     { field: "id", headerName: "ID", width: 100 },
@@ -210,12 +239,46 @@ export default function AwardingBody() {
     },
   ];
 
+  //deleted awarding bodies table columns
+  const deletedAwardingBodyColumns = [
+    { field: "id", headerName: "ID", width: 100 },
+    {
+      field: "awarding_body_name",
+      headerName: "Awarding Body Name",
+      width: 250,
+      editable: true,
+    },
+    {
+      field: "action",
+      headerName: "Action",
+      width: 200,
+      editable: false,
+      renderCell: (params) => {
+        return (
+          <>
+            <Button
+              variant="contained"
+              color="secondary"
+              startIcon={<Edit />}
+              style={{ marginLeft: "20px", marginRight: "30px" }}
+              onClick={() => onClickRestoreAwardingBody(params.row.id)}
+            >
+              Restore
+            </Button>
+          </>
+        );
+      },
+    },
+  ];
+
   return (
     <div>
       <DetailsBody
         onClick={onClickOpenPopup}
         columns={columns}
         rows={awardingBody}
+        deletedRows={trashedAwardingBody}
+        deletedColumns={deletedAwardingBodyColumns}
         button={true}
         restoreButtonText="Restore All"
         onClickRestore={onClickRestore}
