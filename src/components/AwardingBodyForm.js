@@ -34,7 +34,7 @@ export default function AwardingBodyForm({
   return (
     <form className={classes.root} onSubmit={(e) => onSubmit(e, values)}>
       <Grid container>
-        <Grid item xs={12}>
+        <Grid item sm={6} md={12}>
           <TextField
             variant="outlined"
             name="awarding_body_name"
