@@ -39,45 +39,46 @@ export default function Layout({ children }) {
         <div className="sidebar-menu">
           <ul>
             <li>
-              <Link to="/admin/home">
+              <Link to="/admin/home" autofocus={true} >
                 {" "}
-                <span className="las la-bus"></span>
+                <span className="las la-home"></span>
                 <span>Dashboard</span>
               </Link>
             </li>
+            
 
             <li>
               <Link to="/awarding_bodies">
                 {" "}
-                <span className="las la-route"></span>
+                <span className="las la-award"></span>
                 <span>Awarding Bodies</span>
               </Link>
             </li>
             <li>
               <Link to="/resources_types">
                 {" "}
-                <span className="las la-calendar"></span>
+                <span className="lab la-buffer"></span>
                 <span>Resources Types</span>
               </Link>
             </li>
             <li>
               <Link to="/courses">
                 {" "}
-                <span className="las la-calendar"></span>
+                <span className="las la-book-reader"></span>
                 <span>Courses</span>
               </Link>
             </li>
             <li>
               <Link to="/resources">
                 {" "}
-                <span className="las la-bus"></span>
+                <span className="las la-school"></span>
                 <span>Resources</span>
               </Link>
             </li>
             <li>
               <Link onClick={() => {setOpen(true) }}to="#" >
                 {" "}
-                <span className="las la-bus"></span>
+                <span className="las la-sign-out-alt"></span>
                 <span>Logout</span>
               </Link>
             </li>
