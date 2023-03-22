@@ -6,6 +6,7 @@ import Home from "./pages/Home";
 import Login from "./pages/login/Login";
 import ResourceType from "./pages/ResourceType";
 import Course from "./pages/Course";
+import Register from "./pages/Register/Register";
 
 function App() {
   return (
@@ -14,6 +15,7 @@ function App() {
         <section>
           <Switch>
             <Route path="/" exact component={Login} />
+            <Route exact path="/register" component={Register} />
             <Layout>
               <Route exact path="/admin/home" component={Home} />
               <Route exact path="/courses" component={Course} />
