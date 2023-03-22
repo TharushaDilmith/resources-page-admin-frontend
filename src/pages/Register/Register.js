@@ -9,7 +9,8 @@ export default function Register() {
     const [values, setValues] = useState({
         email: "",
         password: "",
-        name: "",
+        firstname: "",
+        lastname: "",
         confirmPassword: "",
         phone: "",
     });
@@ -27,13 +28,13 @@ export default function Register() {
     const onSubmit = (e) => {
         e.preventDefault();
         axios
-            .post("/admin/login", values)
+            .post("/admin/register", values)
             .then((res) => {
                 if(res.data.success){
                     localStorage.setItem("user", res.data.data.user);
                     localStorage.setItem("token", res.data.data.token);
                     history.push('admin/home');
-                    window.location.reload();
+                    // window.location.reload();
                 }else{
                     alert(res.data.message);
                 }
@@ -51,13 +52,24 @@ export default function Register() {
                     <div className="txt_field">
                         <input
                             type="text"
-                            name="name"
+                            name="firstname"
                             required
                             onChange={handleChange}
-                            value={values.email}
+                            value={values.firstname}
                         />
                         <span></span>
-                        <label>Name</label>
+                        <label>First Name</label>
+                    </div>
+                    <div className="txt_field">
+                        <input
+                            type="text"
+                            name="lastname"
+                            required
+                            onChange={handleChange}
+                            value={values.lastname}
+                        />
+                        <span></span>
+                        <label>Last Name</label>
                     </div>
                     <div class="txt_field">
                         <input
@@ -87,7 +99,7 @@ export default function Register() {
                             name="confirmPassword"
                             required
                             onChange={handleChange}
-                            value={values.password}
+                            value={values.confirmPassword}
                         />
                         <span></span>
                         <label>Confirm Password</label>
@@ -98,14 +110,14 @@ export default function Register() {
                             name="phone"
                             required
                             onChange={handleChange}
-                            value={values.email}
+                            value={values.phone}
                         />
                         <span></span>
                         <label>Phone Number</label>
                     </div>
                     <div class="pass">Forgot Password?</div>
                     <button type="submit" className="login_btn">
-                        Sign In
+                        Register
                     </button>
                     <div class="signup_link">
                         Not a member? <Link to="/register">Signup</Link>
