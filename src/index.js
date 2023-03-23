@@ -4,7 +4,7 @@ import App from './App';
 import axios from 'axios';
 
 //default url
-axios.defaults.baseURL = "https://resources.imperiallearning.co.uk/public/api";
+axios.defaults.baseURL = "http://localhost:8000/api";
 
 
 //credentials

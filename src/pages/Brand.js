@@ -7,6 +7,7 @@ import DetailsBody from "../components/detailsBody/DetailsBody";
 import DialogBox from "../components/DialogBox";
 import PopupBody from "../components/PopupBody";
 import SnackbarFeedback from "../components/SnackbarFeedback";
+import BrandForm from "../BrandForm";
 
 //initialize awarding body data
 const initialState = {
@@ -263,8 +264,8 @@ export default function Brand() {
     const deletedAwardingBodyColumns = [
         { field: "id", headerName: "ID", width: 100 },
         {
-            field: "awarding_body_name",
-            headerName: "Awarding Body Name",
+            field: "name",
+            headerName: "Brand Name",
             width: 250,
             editable: true,
         },
@@ -304,10 +305,10 @@ export default function Brand() {
                 onClickRestore={onClickRestore}
             />
             <PopupBody
-                title="Add Awarding Body"
+                title="Add Brand"
                 openPopup={openPopup}
                 form={
-                    <AwardingBodyForm
+                    <BrandForm
                         buttonTitle="Add"
                         data={initialBrand}
                         formClose={() => setOpenPopup(false)}

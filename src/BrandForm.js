@@ -15,7 +15,7 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-export default function AwardingBodyForm({
+export default function BrandForm({
                                              data,
                                              onSubmit,
                                              buttonTitle,
@@ -36,9 +36,9 @@ export default function AwardingBodyForm({
                 <Grid item sm={6} md={12}>
                     <TextField
                         variant="outlined"
-                        name="awarding_body_name"
+                        name="name"
                         label="Name"
-                        value={values.awarding_body_name}
+                        value={values.name}
                         onChange={handleInputChange}
                         required={true}
                     />
