@@ -24,7 +24,7 @@ export default function AwardingBodyForm({
 }) {
   const [values, setValues] = useState(data);
 
-  const handleInputChnage = (e) => {
+  const handleInputChange = (e) => {
     const { name, value } = e.target;
     setValues({ ...values, [name]: value });
   };
@@ -40,7 +40,7 @@ export default function AwardingBodyForm({
             name="awarding_body_name"
             label="Name"
             value={values.awarding_body_name}
-            onChange={handleInputChnage}
+            onChange={handleInputChange}
             required={true}
           />
           <div
