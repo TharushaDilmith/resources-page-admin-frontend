@@ -120,7 +120,7 @@ export default function Register() {
                         Register
                     </button>
                     <div class="signup_link">
-                        Not a member? <Link to="/register">Signup</Link>
+                        Already have an account? <Link to="/">Login</Link>
                     </div>
                 </form>
             </div>

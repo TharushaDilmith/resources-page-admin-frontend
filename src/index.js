@@ -14,11 +14,11 @@ axios.defaults.baseURL = "http://localhost:8000/api";
 //   "Bearer " + localStorage.getItem("token");
 
 if (localStorage.getItem("user")) {
-    const auth = localStorage.getItem("token");
+    const token = localStorage.getItem("token");
 
-    const authObj = JSON.parse(auth);
-
-    const token = authObj.token;
+    // const authObj = JSON.parse(auth);
+    //
+    // const token = authObj.token;
 
     //set the token in the header
     axios.defaults.headers.common["Authorization"] = "Bearer " + token;

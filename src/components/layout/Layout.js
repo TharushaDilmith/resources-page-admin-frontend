@@ -39,14 +39,20 @@ export default function Layout({ children }) {
         <div className="sidebar-menu">
           <ul>
             <li>
-              <Link to="/admin/home" autofocus={true} >
+              <Link to="/admin/home" autoFocus={true} >
                 {" "}
                 <span className="las la-home"></span>
                 <span>Dashboard</span>
               </Link>
             </li>
-            
 
+            <li>
+              <Link to="/brands">
+                {" "}
+                <span className="las la-award"></span>
+                <span>Brands</span>
+              </Link>
+            </li>
             <li>
               <Link to="/awarding_bodies">
                 {" "}
