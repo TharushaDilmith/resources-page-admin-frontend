@@ -108,10 +108,10 @@ export default function Brand() {
     };
 
     //add new award body
-    const addAwardingBody = (e, data) => {
+    const addBrand = (e, data) => {
         e.preventDefault();
         axios
-            .post("/awarding_body", data)
+            .post("/brands", data)
             .then((res) => {
                 if (res.data.success) {
                     getAllBrands();
@@ -311,7 +311,7 @@ export default function Brand() {
                         buttonTitle="Add"
                         data={initialBrand}
                         formClose={() => setOpenPopup(false)}
-                        onSubmit={addAwardingBody}
+                        onSubmit={addBrand}
                     />
                 }
             />
