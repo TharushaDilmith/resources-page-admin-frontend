@@ -129,10 +129,10 @@ export default function Brand() {
     };
 
     //update award body
-    const updateAwardingBody = (e, data) => {
+    const updateBrand = (e, data) => {
         e.preventDefault();
         axios
-            .put("/awarding_body/" + selectedBrand.id, data)
+            .put("/brands/" + selectedBrand.id, data)
             .then((res) => {
                 if (res.data.success) {
                     getAllBrands();
@@ -317,14 +317,14 @@ export default function Brand() {
                 }
             />
             <PopupBody
-                title="Update Awarding Body"
+                title="Update Brand"
                 openPopup={openEditPopup}
                 form={
-                    <AwardingBodyForm
+                    <BrandForm
                         buttonTitle="Update"
                         data={selectedBrand}
                         formClose={() => setOpenEditPopup(false)}
-                        onSubmit={updateAwardingBody}
+                        onSubmit={updateBrand}
                     />
                 }
             />
