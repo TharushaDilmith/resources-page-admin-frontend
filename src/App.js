@@ -7,6 +7,8 @@ import Login from "./pages/login/Login";
 import ResourceType from "./pages/ResourceType";
 import Course from "./pages/Course";
 import Register from "./pages/Register/Register";
+import Brand from "./pages/Brand";
+import MockExam from "./pages/MockExam";
 
 function App() {
   return (
@@ -22,6 +24,7 @@ function App() {
               <Route path ="/resources" component={Resource} />
               <Route exact path="/awarding_bodies" component={AwardingBody} />
               <Route exact path="/resources_types" component={ResourceType} />
+              <Route exact path="/brands" component={Brand} />
             </Layout>
           </Switch>
         </section>
