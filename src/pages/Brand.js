@@ -149,9 +149,9 @@ export default function Brand() {
     };
 
     //delete award body
-    const deleteAwardingBody = (id) => {
+    const deleteBrand = (id) => {
         axios
-            .delete("/awarding_body/" + selectedBrand.id)
+            .delete("/brands/" + selectedBrand.id)
             .then((res) => {
                 if (res.data.success) {
                     setOpenDeleteDialogBox(false);
@@ -332,8 +332,8 @@ export default function Brand() {
             <DialogBox
                 open={openDeleteDialogBox}
                 handleClose={() => setOpenDeleteDialogBox(false)}
-                onClickDelete={deleteAwardingBody}
-                message={"This will delete awarding body permanently!"}
+                onClickDelete={deleteBrand}
+                message={"Brand will be deleted!"}
                 buttonText="Delete"
             />
 
