@@ -341,14 +341,6 @@ export default function Brand() {
                 message={"This will restore all brands!"}
                 buttonText="Restore"
             />
-            {/*
-      <DialogBox
-        open={openSingleRestoreDialogBox}
-        handleClose={() => setOpenSingleRestoreDialogBox(false)}
-        onClickDelete={restoreSingleAwardingBody}
-        message={"This will restore this awarding body!"}
-        buttonText="Restore"
-      /> */}
 
             <SnackbarFeedback
                 open={addSuccess}
