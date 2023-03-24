@@ -8,6 +8,7 @@ import DialogBox from "../components/DialogBox";
 import PopupBody from "../components/PopupBody";
 import SnackbarFeedback from "../components/SnackbarFeedback";
 import BrandForm from "../BrandForm";
+import {getAllBrands} from "../shared/BrandsModule";
 
 //initialize awarding body data
 const initialState = {
@@ -83,21 +84,10 @@ export default function Brand() {
 
     //use effect to get data from api
     useEffect(() => {
-        getAllBrands();
+        getAllBrands(setBrand);
         getTrashedBrands();
     }, []);
 
-    //get all awarding body
-    const getAllBrands = () => {
-        axios
-            .get("/brands")
-            .then((res) => {
-                setBrand(res.data.data);
-            })
-            .catch((err) => {
-                console.log(err);
-            });
-    };
 
     //on click delete
     const onClickDelete = (data) => {
