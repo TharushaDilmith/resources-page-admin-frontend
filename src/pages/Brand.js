@@ -39,6 +39,9 @@ export default function Brand() {
     //use state to store the restore dialog box
     const [openRestoreDialogBox, setOpenRestoreDialogBox] = React.useState(false);
 
+    //use state to store the restore dialog box
+    const [openRestoreAllMessage, setOpenRestoreAllMessage] = React.useState(false);
+
     //use state to store the single restore dialog box
     const [openSingleRestoreDialogBox, setOpenSingleRestoreDialogBox] =
         useState(false);
@@ -71,6 +74,8 @@ export default function Brand() {
     //use state to store the trashed award body
     const [trashedBrand, setTrashedBrand] = useState([]);
 
+    const [restoreAllSuccess, setRestoreAllSuccess] = useState(false);
+
     //onclick open popup
     const onClickOpenPopup = () => {
         setOpenPopup(true);
@@ -78,9 +83,8 @@ export default function Brand() {
 
     //use effect to get data from api
     useEffect(() => {
-        console.log("use effect")
         getAllBrands();
-        getTrashedAwardingBodies();
+        getTrashedBrands();
     }, []);
 
     //get all awarding body
@@ -89,7 +93,6 @@ export default function Brand() {
             .get("/brands")
             .then((res) => {
                 setBrand(res.data.data);
-                console.log(res);
             })
             .catch((err) => {
                 console.log(err);
@@ -108,7 +111,7 @@ export default function Brand() {
         setOpenEditPopup(true);
     };
 
-    //add new award body
+    //add new brand
     const addBrand = (e, data) => {
         e.preventDefault();
         axios
@@ -128,7 +131,7 @@ export default function Brand() {
             });
     };
 
-    //update award body
+    //update brand
     const updateBrand = (e, data) => {
         e.preventDefault();
         axios
@@ -148,14 +151,14 @@ export default function Brand() {
             });
     };
 
-    //delete award body
+    //delete brand
     const deleteBrand = (id) => {
         axios
             .delete("/brands/" + selectedBrand.id)
             .then((res) => {
                 if (res.data.success) {
                     setOpenDeleteDialogBox(false);
-                    getTrashedAwardingBodies();
+                    getTrashedBrands();
                     getAllBrands();
                     setDeleteSuccess(true);
                 } else {
@@ -168,21 +171,21 @@ export default function Brand() {
             });
     };
 
-    //onclick restore award bodies
+    //onclick restore brand
     const onClickRestore = () => {
         setOpenRestoreDialogBox(true);
     };
 
-    //restore awarding bodies
-    const restoreAwardingBodies = () => {
+    //restore brands
+    const restoreBrands = () => {
         axios
-            .post("/awarding_body/restore")
-
+            .post("/brands/restore")
             .then((res) => {
                 if (res.data.success) {
                     setOpenRestoreDialogBox(false);
                     getAllBrands();
-                    // setSuccessMessage(res.data.message);
+                    setSuccessMessage(res.data.message);
+                    setRestoreAllSuccess(true);
                 } else {
                     setError(true);
                     setErrorMessage(res.data.message);
@@ -194,11 +197,12 @@ export default function Brand() {
     };
 
     //get trashed awarding bodies
-    const getTrashedAwardingBodies = () => {
+    const getTrashedBrands = () => {
         axios
-            .get("/awarding_body/deleted")
+            .get("/brands/deleted")
             .then((res) => {
                 setTrashedBrand(res.data);
+                console.log(res.data);
             })
             .catch((err) => {
                 console.log(err);
@@ -216,7 +220,7 @@ export default function Brand() {
         try {
             axios.post("/awarding_body/restore/" + id).then((res) => {
                 console.log("done");
-                getTrashedAwardingBodies();
+                getTrashedBrands();
                 getAllBrands();
                 setSingleRestoreSuccess(true);
             });
@@ -340,8 +344,8 @@ export default function Brand() {
             <DialogBox
                 open={openRestoreDialogBox}
                 handleClose={() => setOpenRestoreDialogBox(false)}
-                onClickDelete={restoreAwardingBodies}
-                message={"This will restore all awarding bodies!"}
+                onClickDelete={restoreBrands}
+                message={"This will restore all brands!"}
                 buttonText="Restore"
             />
             {/*
@@ -355,29 +359,41 @@ export default function Brand() {
 
             <SnackbarFeedback
                 open={addSuccess}
-                message={"Awarding Body added successfully!"}
+                message={"Brand added successfully!"}
                 onClose={() => setAddSuccess(false)}
                 type="success"
             />
             <SnackbarFeedback
                 open={updateSuccess}
-                message={"Awarding Body updated successfully!"}
+                message={"Brand updated successfully!"}
                 onClose={() => setUpdateSuccess(false)}
                 type="success"
             />
 
             <SnackbarFeedback
                 open={deleteSuccess}
-                message={"Awarding Body deleted successfully!"}
+                message={"Brand deleted successfully!"}
                 onClose={() => setDeleteSuccess(false)}
                 type="success"
             />
 
             <SnackbarFeedback
                 open={singleRestoreSuccess}
-                message={"Awarding Body restored successfully!"}
+                message={"Brand restored successfully!"}
                 onClose={() => setSingleRestoreSuccess(false)}
                 type="success"
+            />
+            <SnackbarFeedback
+                open={restoreAllSuccess}
+                message={"All brand restored successfully!"}
+                onClose={() => setRestoreAllSuccess(false)}
+                type="success"
+            />
+            <SnackbarFeedback
+                open={error}
+                message={errorMessage}
+                onClose={() => setError(false)}
+                type="error"
             />
         </div>
     );
