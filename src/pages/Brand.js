@@ -78,9 +78,8 @@ export default function Brand() {
 
     //use effect to get data from api
     useEffect(() => {
-        console.log("use effect")
         getAllBrands();
-        getTrashedAwardingBodies();
+        getTrashedBrands();
     }, []);
 
     //get all awarding body
@@ -89,7 +88,6 @@ export default function Brand() {
             .get("/brands")
             .then((res) => {
                 setBrand(res.data.data);
-                console.log(res);
             })
             .catch((err) => {
                 console.log(err);
@@ -108,7 +106,7 @@ export default function Brand() {
         setOpenEditPopup(true);
     };
 
-    //add new award body
+    //add new brand
     const addBrand = (e, data) => {
         e.preventDefault();
         axios
@@ -128,7 +126,7 @@ export default function Brand() {
             });
     };
 
-    //update award body
+    //update brand
     const updateBrand = (e, data) => {
         e.preventDefault();
         axios
@@ -148,14 +146,14 @@ export default function Brand() {
             });
     };
 
-    //delete award body
+    //delete brand
     const deleteBrand = (id) => {
         axios
             .delete("/brands/" + selectedBrand.id)
             .then((res) => {
                 if (res.data.success) {
                     setOpenDeleteDialogBox(false);
-                    getTrashedAwardingBodies();
+                    getTrashedBrands();
                     getAllBrands();
                     setDeleteSuccess(true);
                 } else {
@@ -168,13 +166,13 @@ export default function Brand() {
             });
     };
 
-    //onclick restore award bodies
+    //onclick restore brand
     const onClickRestore = () => {
         setOpenRestoreDialogBox(true);
     };
 
-    //restore awarding bodies
-    const restoreAwardingBodies = () => {
+    //restore brands
+    const restoreBrands = () => {
         axios
             .post("/awarding_body/restore")
 
@@ -194,11 +192,12 @@ export default function Brand() {
     };
 
     //get trashed awarding bodies
-    const getTrashedAwardingBodies = () => {
+    const getTrashedBrands = () => {
         axios
-            .get("/awarding_body/deleted")
+            .get("/brands/deleted")
             .then((res) => {
                 setTrashedBrand(res.data);
+                console.log(res.data);
             })
             .catch((err) => {
                 console.log(err);
@@ -216,7 +215,7 @@ export default function Brand() {
         try {
             axios.post("/awarding_body/restore/" + id).then((res) => {
                 console.log("done");
-                getTrashedAwardingBodies();
+                getTrashedBrands();
                 getAllBrands();
                 setSingleRestoreSuccess(true);
             });
@@ -340,7 +339,7 @@ export default function Brand() {
             <DialogBox
                 open={openRestoreDialogBox}
                 handleClose={() => setOpenRestoreDialogBox(false)}
-                onClickDelete={restoreAwardingBodies}
+                onClickDelete={restoreBrands}
                 message={"This will restore all awarding bodies!"}
                 buttonText="Restore"
             />
