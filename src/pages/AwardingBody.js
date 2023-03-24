@@ -93,6 +93,7 @@ export default function AwardingBody() {
             .get("/awarding_bodies")
             .then((res) => {
                 setAwardingBody(res.data);
+                console.log(res.data)
             })
             .catch((err) => {
                 console.log(err);
@@ -241,7 +242,7 @@ export default function AwardingBody() {
             editable: true,
         },
         {
-            field: "brand",
+            field: "brand_name",
             headerName: "Brand",
             width: 250,
             editable: true,
@@ -282,7 +283,7 @@ export default function AwardingBody() {
             editable: true,
         },
         {
-            field: "brand",
+            field: "brand_name",
             headerName: "Brand",
             width: 250,
             editable: true,
