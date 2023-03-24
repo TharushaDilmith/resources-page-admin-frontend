@@ -379,6 +379,12 @@ export default function Brand() {
                 onClose={() => setSingleRestoreSuccess(false)}
                 type="success"
             />
+            <SnackbarFeedback
+                open={error}
+                message={errorMessage}
+                onClose={() => setError(false)}
+                type="error"
+            />
         </div>
     );
 }
