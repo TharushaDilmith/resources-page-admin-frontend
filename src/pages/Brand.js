@@ -196,7 +196,7 @@ export default function Brand() {
             });
     };
 
-    //get trashed awarding bodies
+    //get trashed brands
     const getTrashedBrands = () => {
         axios
             .get("/brands/deleted")
@@ -209,17 +209,10 @@ export default function Brand() {
             });
     };
 
-    // //onclick single restore single award body
-    // const onClickRestoreSingleAwardingBody = (id) => {
-    //   setSelectedRestoreAwardingBodyId(id);
-    //   setOpenSingleRestoreDialogBox(true);
-    // };
-
-    //restore single award body
-    const restoreSingleAwardingBody = (id) => {
+    //restore single brand
+    const restoreSingleBrand = (id) => {
         try {
-            axios.post("/awarding_body/restore/" + id).then((res) => {
-                console.log("done");
+            axios.post("/brands/restore/" + id).then((res) => {
                 getTrashedBrands();
                 getAllBrands();
                 setSingleRestoreSuccess(true);
@@ -286,7 +279,7 @@ export default function Brand() {
                             color="secondary"
                             startIcon={<Edit />}
                             style={{ marginLeft: "20px", marginRight: "30px" }}
-                            onClick={() => restoreSingleAwardingBody(params.row.id)}
+                            onClick={() => restoreSingleBrand(params.row.id)}
                         >
                             Restore
                         </Button>
