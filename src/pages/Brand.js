@@ -39,6 +39,9 @@ export default function Brand() {
     //use state to store the restore dialog box
     const [openRestoreDialogBox, setOpenRestoreDialogBox] = React.useState(false);
 
+    //use state to store the restore dialog box
+    const [openRestoreAllMessage, setOpenRestoreAllMessage] = React.useState(false);
+
     //use state to store the single restore dialog box
     const [openSingleRestoreDialogBox, setOpenSingleRestoreDialogBox] =
         useState(false);
@@ -70,6 +73,8 @@ export default function Brand() {
 
     //use state to store the trashed award body
     const [trashedBrand, setTrashedBrand] = useState([]);
+
+    const [restoreAllSuccess, setRestoreAllSuccess] = useState(false);
 
     //onclick open popup
     const onClickOpenPopup = () => {
@@ -174,13 +179,13 @@ export default function Brand() {
     //restore brands
     const restoreBrands = () => {
         axios
-            .post("/awarding_body/restore")
-
+            .post("/brands/restore")
             .then((res) => {
                 if (res.data.success) {
                     setOpenRestoreDialogBox(false);
                     getAllBrands();
-                    // setSuccessMessage(res.data.message);
+                    setSuccessMessage(res.data.message);
+                    setRestoreAllSuccess(true);
                 } else {
                     setError(true);
                     setErrorMessage(res.data.message);
@@ -340,7 +345,7 @@ export default function Brand() {
                 open={openRestoreDialogBox}
                 handleClose={() => setOpenRestoreDialogBox(false)}
                 onClickDelete={restoreBrands}
-                message={"This will restore all awarding bodies!"}
+                message={"This will restore all brands!"}
                 buttonText="Restore"
             />
             {/*
@@ -354,28 +359,34 @@ export default function Brand() {
 
             <SnackbarFeedback
                 open={addSuccess}
-                message={"Awarding Body added successfully!"}
+                message={"Brand added successfully!"}
                 onClose={() => setAddSuccess(false)}
                 type="success"
             />
             <SnackbarFeedback
                 open={updateSuccess}
-                message={"Awarding Body updated successfully!"}
+                message={"Brand updated successfully!"}
                 onClose={() => setUpdateSuccess(false)}
                 type="success"
             />
 
             <SnackbarFeedback
                 open={deleteSuccess}
-                message={"Awarding Body deleted successfully!"}
+                message={"Brand deleted successfully!"}
                 onClose={() => setDeleteSuccess(false)}
                 type="success"
             />
 
             <SnackbarFeedback
                 open={singleRestoreSuccess}
-                message={"Awarding Body restored successfully!"}
+                message={"Brand restored successfully!"}
                 onClose={() => setSingleRestoreSuccess(false)}
+                type="success"
+            />
+            <SnackbarFeedback
+                open={restoreAllSuccess}
+                message={"All brand restored successfully!"}
+                onClose={() => setRestoreAllSuccess(false)}
                 type="success"
             />
             <SnackbarFeedback
