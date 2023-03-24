@@ -189,6 +189,7 @@ export default function AwardingBody() {
                 if (res.data.success) {
                     setOpenRestoreDialogBox(false);
                     getAllAwardingBody();
+                    getTrashedAwardingBodies();
                     // setSuccessMessage(res.data.message);
                 } else {
                     setError(true);
