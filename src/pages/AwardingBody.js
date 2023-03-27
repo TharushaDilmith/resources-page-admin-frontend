@@ -1,4 +1,4 @@
-import {Button, IconButton} from "@material-ui/core";
+import {Box, Button, CircularProgress, IconButton} from "@material-ui/core";
 import {Delete, Edit} from "@material-ui/icons";
 import axios from "axios";
 import React, {useEffect, useState} from "react";
@@ -75,6 +75,8 @@ export default function AwardingBody() {
     //use state to store the trashed award body
     const [trashedAwardingBody, setTrashedAwardingBody] = useState([]);
 
+    const [loading, setLoading] = useState(false);
+
     //onclick open popup
     const onClickOpenPopup = () => {
         setOpenPopup(true);
@@ -89,11 +91,13 @@ export default function AwardingBody() {
 
     //get all awarding body
     const getAllAwardingBody = () => {
+        setLoading(true);
         axios
             .get("/awarding_bodies")
             .then((res) => {
                 setAwardingBody(res.data);
                 console.log(res.data)
+                setLoading(false);
             })
             .catch((err) => {
                 console.log(err);
@@ -189,6 +193,7 @@ export default function AwardingBody() {
                 if (res.data.success) {
                     setOpenRestoreDialogBox(false);
                     getAllAwardingBody();
+                    getTrashedAwardingBodies();
                     // setSuccessMessage(res.data.message);
                 } else {
                     setError(true);
@@ -313,16 +318,21 @@ export default function AwardingBody() {
 
     return (
         <div>
-            <DetailsBody
-                onClick={onClickOpenPopup}
-                columns={columns}
-                rows={awardingBody}
-                deletedRows={trashedAwardingBody}
-                deletedColumns={deletedAwardingBodyColumns}
-                button={true}
-                restoreButtonText="Restore All"
-                onClickRestore={onClickRestore}
-            />
+            {
+                loading ?<Box sx={{ display: 'flex',alignContent:'center',justifyContent:'center'}} >
+                    <CircularProgress />
+                </Box> :             <DetailsBody
+                    onClick={onClickOpenPopup}
+                    columns={columns}
+                    rows={awardingBody}
+                    deletedRows={trashedAwardingBody}
+                    deletedColumns={deletedAwardingBodyColumns}
+                    button={true}
+                    restoreButtonText="Restore All"
+                    onClickRestore={onClickRestore}
+                />
+            }
+
             <PopupBody
                 title="Add Awarding Body"
                 openPopup={openPopup}
