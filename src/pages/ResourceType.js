@@ -87,6 +87,7 @@ export default function ResourceType() {
             .get("/resource_types")
             .then((res) => {
                 setResourceTypes(res.data);
+                console.log(res.data)
             })
             .catch((err) => {
                 console.log(err);
@@ -226,6 +227,18 @@ export default function ResourceType() {
             editable: true,
         },
         {
+            field: "brand_name",
+            headerName: "Brand",
+            width: 250,
+            editable: true,
+        },
+        {
+            field: "awarding_body_name",
+            headerName: "Awarding Body",
+            width: 250,
+            editable: true,
+        },
+        {
             field: "action",
             headerName: "Action",
             width: 200,
@@ -257,6 +270,18 @@ export default function ResourceType() {
         {
             field: "resource_type_name",
             headerName: "Resource Type Name",
+            width: 250,
+            editable: true,
+        },
+        {
+            field: "resource_type_name",
+            headerName: "brand_name",
+            width: 250,
+            editable: true,
+        },
+        {
+            field: "Awarding Body",
+            headerName: "awarding_body_name",
             width: 250,
             editable: true,
         },
@@ -317,6 +342,8 @@ export default function ResourceType() {
                     <ResourceTypeForm
                         buttonTitle="Update"
                         data={selectedResourseType}
+                        brands={brand}
+                        awardingBodies={awardingBody}
                         formClose={() => setOpenEditPopup(false)}
                         onSubmit={editResourceType}
                     />

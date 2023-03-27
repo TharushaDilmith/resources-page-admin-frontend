@@ -25,7 +25,7 @@ export default function ResourceTypeForm({
                                              awardingBodies
                                          }) {
     const [values, setValues] = useState(data);
-    const [selectedAwardingBodies, setSelectedAwardingBodies] = useState([]);
+    const [selectedAwardingBodies, setSelectedAwardingBodies] = useState(awardingBodies);
 
 
     const handleInputChange = (e) => {
