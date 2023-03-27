@@ -1,4 +1,4 @@
-import {Button, IconButton} from "@material-ui/core";
+import {Box, Button, CircularProgress, IconButton} from "@material-ui/core";
 import {Delete, Edit} from "@material-ui/icons";
 import axios from "axios";
 import React, {useEffect, useState} from "react";
@@ -73,6 +73,8 @@ export default function ResourceType() {
     //use state to store awarding bodies
     const [awardingBody, setAwardingBody] = React.useState([]);
 
+
+
     //use effect to get data from the server
     useEffect(() => {
         getAllResourceTypes();
@@ -83,11 +85,13 @@ export default function ResourceType() {
 
     //get all resource types
     const getAllResourceTypes = () => {
+        setLoading(true);
         axios
             .get("/resource_types")
             .then((res) => {
                 setResourceTypes(res.data);
                 console.log(res.data)
+                setLoading(false)
             })
             .catch((err) => {
                 console.log(err);
@@ -192,6 +196,7 @@ export default function ResourceType() {
             .then((res) => {
                 if (res.data.success) {
                     getAllResourceTypes();
+                    getAllDeletedResourceTypes();
                     setOpenRestoreDialogBox(false);
                 } else {
                     setError(true);
@@ -310,16 +315,24 @@ export default function ResourceType() {
 
     return (
         <div className="ResourceType">
-            <DetailsBody
-                onClick={onClickOpenPopup}
-                columns={columns}
-                rows={resourceTypes}
-                deletedColumns={deletedColumns}
-                deletedRows={deletedResourceType}
-                button={true}
-                restoreButtonText="Restore All"
-                onClickRestore={() => setOpenRestoreDialogBox(true)}
-            />
+            {
+                loading ? (
+                    <Box sx={{ display: 'flex',alignContent:'center',justifyContent:'center'}} >
+                        <CircularProgress />
+                    </Box>
+                ):(
+                    <DetailsBody
+                        onClick={onClickOpenPopup}
+                        columns={columns}
+                        rows={resourceTypes}
+                        deletedColumns={deletedColumns}
+                        deletedRows={deletedResourceType}
+                        button={true}
+                        restoreButtonText="Restore All"
+                        onClickRestore={() => setOpenRestoreDialogBox(true)}
+                    />
+                )
+            }
 
             <PopupBody
                 title="Add Resource Type"
