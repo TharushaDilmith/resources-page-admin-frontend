@@ -5,7 +5,7 @@ import React, {useEffect, useState} from "react";
 import DetailsBody from "../components/detailsBody/DetailsBody";
 import DialogBox from "../components/DialogBox";
 import PopupBody from "../components/PopupBody";
-import ResourseTypeForm from "../components/ResourseTypeForm";
+import ResourceTypeForm from "../components/ResourceTypeForm";
 import SnackbarFeedback from "../components/SnackbarFeedback";
 import {getAllAwardingBody} from "../shared/AwardingBodyModule";
 import {getAllBrands} from "../shared/BrandsModule";
@@ -14,6 +14,8 @@ import {getAllBrands} from "../shared/BrandsModule";
 const initialState = {
     id: "",
     resource_type_name: "",
+    brand: "",
+    awarding_body: "",
 };
 
 export default function ResourceType() {
@@ -24,7 +26,7 @@ export default function ResourceType() {
     const [deletedResourceType, setDeletedResourceType] = useState();
 
     //initial resourse type
-    const [initialResourseType, setInitialResourseType] = useState(initialState);
+    const [initialResourceType, setInitialResourceType] = useState(initialState);
 
     //use state to store the popup
     const [openPopup, setOpenPopup] = React.useState(false);
@@ -294,22 +296,24 @@ export default function ResourceType() {
             />
 
             <PopupBody
-                title="Add Resourse Type"
+                title="Add Resource Type"
                 openPopup={openPopup}
                 form={
-                    <ResourseTypeForm
+                    <ResourceTypeForm
                         buttonTitle="Add"
-                        data={initialResourseType}
+                        data={initialResourceType}
+                        brands={brand}
+                        awardingBodies={awardingBody}
                         formClose={() => setOpenPopup(false)}
                         onSubmit={addNewResourceType}
                     />
                 }
             />
             <PopupBody
-                title="Update Resourse Type"
+                title="Update Resource Type"
                 openPopup={openEditPopup}
                 form={
-                    <ResourseTypeForm
+                    <ResourceTypeForm
                         buttonTitle="Update"
                         data={selectedResourseType}
                         formClose={() => setOpenEditPopup(false)}
@@ -321,7 +325,7 @@ export default function ResourceType() {
                 open={openDeleteDialogBox}
                 handleClose={() => setOpenDeleteDialogBox(false)}
                 onClickDelete={deleteResourceType}
-                message={"This will delete resourse type permanently!"}
+                message={"This will delete resource type permanently!"}
                 buttonText={"Delete"}
             />
 
