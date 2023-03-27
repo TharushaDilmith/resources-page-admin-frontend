@@ -85,7 +85,7 @@ export default function AwardingBody() {
     //use effect to get data from api
     useEffect(() => {
         getAllAwardingBody();
-        getAllBrands(setBrand);
+        getAllBrands(setBrand,setLoading);
         getTrashedAwardingBodies();
     }, []);
 

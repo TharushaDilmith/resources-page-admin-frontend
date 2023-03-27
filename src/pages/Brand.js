@@ -1,4 +1,4 @@
-import { Button, IconButton } from "@material-ui/core";
+import {Box, Button, CircularProgress, IconButton} from "@material-ui/core";
 import { Delete, Edit } from "@material-ui/icons";
 import axios from "axios";
 import React, { useEffect, useState } from "react";
@@ -77,6 +77,8 @@ export default function Brand() {
 
     const [restoreAllSuccess, setRestoreAllSuccess] = useState(false);
 
+    const [loading, setLoading] = useState(false);
+
     //onclick open popup
     const onClickOpenPopup = () => {
         setOpenPopup(true);
@@ -84,7 +86,7 @@ export default function Brand() {
 
     //use effect to get data from api
     useEffect(() => {
-        getAllBrands(setBrand);
+        getAllBrands(setBrand,setLoading);
         getTrashedBrands();
     }, []);
 
@@ -108,7 +110,7 @@ export default function Brand() {
             .post("/brands", data)
             .then((res) => {
                 if (res.data.success) {
-                    getAllBrands();
+                    getAllBrands(setBrand,setLoading);
                     setOpenPopup(false);
                     setAddSuccess(true);
                 } else {
@@ -128,7 +130,7 @@ export default function Brand() {
             .put("/brands/" + selectedBrand.id, data)
             .then((res) => {
                 if (res.data.success) {
-                    getAllBrands();
+                    getAllBrands(setBrand,setLoading);
                     setOpenEditPopup(false);
                     setUpdateSuccess(true);
                 } else {
@@ -149,7 +151,7 @@ export default function Brand() {
                 if (res.data.success) {
                     setOpenDeleteDialogBox(false);
                     getTrashedBrands();
-                    getAllBrands();
+                    getAllBrands(setBrand,setLoading);
                     setDeleteSuccess(true);
                 } else {
                     setError(true);
@@ -173,7 +175,7 @@ export default function Brand() {
             .then((res) => {
                 if (res.data.success) {
                     setOpenRestoreDialogBox(false);
-                    getAllBrands();
+                    getAllBrands(setBrand,setLoading);
                     setSuccessMessage(res.data.message);
                     setRestoreAllSuccess(true);
                 } else {
@@ -204,7 +206,7 @@ export default function Brand() {
         try {
             axios.post("/brands/restore/" + id).then((res) => {
                 getTrashedBrands();
-                getAllBrands();
+                getAllBrands(setBrand,setLoading);
                 setSingleRestoreSuccess(true);
             });
         } catch (error) {
@@ -281,16 +283,25 @@ export default function Brand() {
 
     return (
         <div>
-            <DetailsBody
-                onClick={onClickOpenPopup}
-                columns={columns}
-                rows={brand}
-                deletedRows={trashedBrand}
-                deletedColumns={deletedAwardingBodyColumns}
-                button={true}
-                restoreButtonText="Restore All"
-                onClickRestore={onClickRestore}
-            />
+            {
+                loading ? (
+                    <Box sx={{ display: 'flex',alignContent:'center',justifyContent:'center'}} >
+                        <CircularProgress />
+                    </Box>
+                ):(
+                    <DetailsBody
+                        onClick={onClickOpenPopup}
+                        columns={columns}
+                        rows={brand}
+                        deletedRows={trashedBrand}
+                        deletedColumns={deletedAwardingBodyColumns}
+                        button={true}
+                        restoreButtonText="Restore All"
+                        onClickRestore={onClickRestore}
+                    />
+                )
+            }
+
             <PopupBody
                 title="Add Brand"
                 openPopup={openPopup}
