@@ -99,10 +99,10 @@ export default function Layout({ children }) {
             </label>
             Dashboard
           </h2>
-          <div className="search-wrapper">
-            <span className="las la-search"></span>
-            <input type="search" name="" placeholder="Search here" id="" />
-          </div>
+          {/*<div className="search-wrapper">*/}
+          {/*  <span className="las la-search"></span>*/}
+          {/*  <input type="search" name="" placeholder="Search here" id="" />*/}
+          {/*</div>*/}
           <div className="user-wrapper">
             <img
               src="https://static.vecteezy.com/system/resources/thumbnails/000/513/075/small_2x/36_Admin_Roles.jpg"

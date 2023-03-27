@@ -8,6 +8,7 @@ import DialogBox from "../components/DialogBox";
 import PopupBody from "../components/PopupBody";
 import SnackbarFeedback from "../components/SnackbarFeedback";
 import {getAllBrands} from "../shared/BrandsModule";
+import {getAllAwardingBody} from "../shared/AwardingBodyModule";
 
 //initialize awarding body data
 const initialState = {
@@ -84,27 +85,12 @@ export default function AwardingBody() {
 
     //use effect to get data from api
     useEffect(() => {
-        getAllAwardingBody();
+        getAllAwardingBody(setAwardingBody,setLoading);
         getAllBrands(setBrand,setLoading);
         getTrashedAwardingBodies();
     }, []);
 
-    //get all awarding body
-    const getAllAwardingBody = () => {
-        setLoading(true);
-        axios
-            .get("/awarding_bodies")
-            .then((res) => {
-                setAwardingBody(res.data);
-                console.log(res.data)
-                setLoading(false);
-            })
-            .catch((err) => {
-                console.log(err);
-            });
-    };
 
-    //get all brands
 
     //on click delete
     const onClickDelete = (data) => {
@@ -126,7 +112,7 @@ export default function AwardingBody() {
             .post("/awarding_body", data)
             .then((res) => {
                 if (res.data.success) {
-                    getAllAwardingBody();
+                    getAllAwardingBody(setAwardingBody,setLoading);
                     setOpenPopup(false);
                     setAddSuccess(true);
                 } else {
@@ -146,7 +132,7 @@ export default function AwardingBody() {
             .put("/awarding_body/" + selectedAwardingBody.id, data)
             .then((res) => {
                 if (res.data.success) {
-                    getAllAwardingBody();
+                    getAllAwardingBody(setAwardingBody,setLoading);
                     setOpenEditPopup(false);
                     setUpdateSuccess(true);
                 } else {
@@ -167,7 +153,7 @@ export default function AwardingBody() {
                 if (res.data.success) {
                     setOpenDeleteDialogBox(false);
                     getTrashedAwardingBodies();
-                    getAllAwardingBody();
+                    getAllAwardingBody(setAwardingBody,setLoading);
                     setDeleteSuccess(true);
                 } else {
                     setError(true);
@@ -192,7 +178,7 @@ export default function AwardingBody() {
             .then((res) => {
                 if (res.data.success) {
                     setOpenRestoreDialogBox(false);
-                    getAllAwardingBody();
+                    getAllAwardingBody(setAwardingBody,setLoading);
                     getTrashedAwardingBodies();
                     // setSuccessMessage(res.data.message);
                 } else {
@@ -229,7 +215,7 @@ export default function AwardingBody() {
             axios.post("/awarding_body/restore/" + id).then((res) => {
                 console.log("done");
                 getTrashedAwardingBodies();
-                getAllAwardingBody();
+                getAllAwardingBody(setAwardingBody,setLoading);
                 setSingleRestoreSuccess(true);
             });
         } catch (error) {
