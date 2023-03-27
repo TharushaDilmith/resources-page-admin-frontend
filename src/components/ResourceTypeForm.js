@@ -44,6 +44,10 @@ export default function ResourceTypeForm({
         setValues({...values, awarding_body: event.target.value});
     }
 
+    const handleValidityChange = (event) => {
+        setValues({...values, validity: event.target.value});
+    }
+
 
     const classes = useStyles();
 
@@ -100,6 +104,24 @@ export default function ResourceTypeForm({
                         onChange={handleInputChange}
                         required={true}
                     />
+                    {/*add validity field as dropdown*/}
+                    <FormControl fullWidth required>
+                        <InputLabel
+                            className="MuiFormLabel-root MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-outlined Mui-required Mui-required"
+                            id="validity-select-label">
+                            Validity</InputLabel>
+                        <Select
+                            labelId="validity-select-label"
+                            id="validity-select"
+                            variant="outlined"
+                            label="Validity"
+                            onChange={handleValidityChange}
+                            value={values.validity}
+                        >
+                            <MenuItem value={1}>Valid</MenuItem>
+                            <MenuItem value={0}>Expired</MenuItem>
+                        </Select>
+                    </FormControl>
                     <div
                         style={{display: "flex", alignItems: "center", marginTop: "10px"}}
                     >

@@ -16,6 +16,7 @@ const initialState = {
     resource_type_name: "",
     brand: "",
     awarding_body: "",
+    validity: false
 };
 
 export default function ResourceType() {
