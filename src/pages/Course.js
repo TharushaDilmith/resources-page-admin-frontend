@@ -90,6 +90,7 @@ export default function Course() {
             .get("/courses")
             .then((res) => {
                 setCourses(res.data);
+                console.log(res.data)
             })
             .catch((err) => {
                 console.log(err);
@@ -261,7 +262,7 @@ export default function Course() {
             editable: true,
         },
         {
-            field: "validity",
+            field: "valid",
             headerName: "Course Validity",
             width: 250,
             editable: true,
