@@ -73,7 +73,7 @@ export default function ResourceName() {
     const [addSuccess, setAddSuccess] = useState(false);
 
     //use state to store the trashed award body
-    const [trashedBrand, setTrashedBrand] = useState([]);
+    const [trashedResourceName, setTrashedResourceName] = useState([]);
 
     const [restoreAllSuccess, setRestoreAllSuccess] = useState(false);
 
@@ -159,12 +159,12 @@ export default function ResourceName() {
     //delete resourceName
     const deleteResourceName = (id) => {
         axios
-            .delete("/brands/" + selectedResourceName.id)
+            .delete("/resource_names/" + selectedResourceName.id)
             .then((res) => {
                 if (res.data.success) {
                     setOpenDeleteDialogBox(false);
                     getTrashedResourceName();
-                    getAllBrands(setResourceName,setLoading);
+                    getAllResourceName();
                     setDeleteSuccess(true);
                 } else {
                     setError(true);
@@ -204,9 +204,9 @@ export default function ResourceName() {
     //get trashed brands
     const getTrashedResourceName = () => {
         axios
-            .get("/brands/deleted")
+            .get("/resource_names/deleted")
             .then((res) => {
-                setTrashedBrand(res.data);
+                setTrashedResourceName(res.data.resource_names);
                 console.log(res.data);
             })
             .catch((err) => {
@@ -306,7 +306,7 @@ export default function ResourceName() {
                         onClick={onClickOpenPopup}
                         columns={columns}
                         rows={resourceName}
-                        deletedRows={trashedBrand}
+                        deletedRows={trashedResourceName}
                         deletedColumns={deletedResourceNameColumns}
                         button={true}
                         restoreButtonText="Restore All"
