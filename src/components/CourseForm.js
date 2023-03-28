@@ -181,7 +181,7 @@ export default function CourseForm({
                         required={true}
                     />
 
-                    {/*add course url field*/}
+                    {/*/!*add course url field*!/*/}
                     <TextField
                         variant="outlined"
                         name="course_url"

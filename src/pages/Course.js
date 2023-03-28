@@ -23,6 +23,8 @@ const initialState = {
     resource_type: "",
 };
 
+
+
 export default function Course() {
     //use state to store the data
     const [courses, setCourses] = React.useState([]);
@@ -212,6 +214,7 @@ export default function Course() {
             .then((res) => {
                 if (res.data.success) {
                     getAllCourses();
+                    getAllDeletedCourses();
                     setOpenRestoreDialogBox(false);
                 } else {
                     alert(res.data.message);
@@ -303,6 +306,42 @@ export default function Course() {
             editable: true,
         },
         {
+            field: "brand_name",
+            headerName: "Brand",
+            width: 250,
+            editable: true,
+        },
+        {
+            field: "awarding_body_name",
+            headerName: "Awarding Body",
+            width: 250,
+            editable: true,
+        },
+        {
+            field: "resource_type",
+            headerName: "Resource Type",
+            width: 250,
+            editable: true,
+        },
+        {
+            field: "course_type",
+            headerName: "Course Type",
+            width: 250,
+            editable: true,
+        },
+        {
+            field: "course_link",
+            headerName: "Course Link",
+            width: 250,
+            editable: true,
+        },
+        {
+            field: "valid",
+            headerName: "Course Validity",
+            width: 250,
+            editable: true,
+        },
+        {
             field: "action",
             headerName: "Action",
             width: 200,
@@ -340,6 +379,7 @@ export default function Course() {
                 onClickRestore={() => setOpenRestoreDialogBox(true)}
             />
 
+
             <PopupBody
                 title="Add Course"
                 openPopup={openPopup}
@@ -352,6 +392,7 @@ export default function Course() {
                         brands={brand}
                         awardingBodies={awardingBody}
                         resourceTypes={resourceName}
+
                     />
                 }
             />
@@ -364,6 +405,9 @@ export default function Course() {
                         data={selectedCourse}
                         formClose={() => setOpenEditPopup(false)}
                         onSubmit={editCourse}
+                        brands={brand}
+                        awardingBodies={awardingBody}
+                        resourceTypes={resourceName}
                     />
                 }
             />
