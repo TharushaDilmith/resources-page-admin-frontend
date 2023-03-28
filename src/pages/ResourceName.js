@@ -2,13 +2,12 @@ import {Box, Button, CircularProgress, IconButton} from "@material-ui/core";
 import { Delete, Edit } from "@material-ui/icons";
 import axios from "axios";
 import React, { useEffect, useState } from "react";
-import AwardingBodyForm from "../components/AwardingBodyForm";
 import DetailsBody from "../components/detailsBody/DetailsBody";
 import DialogBox from "../components/DialogBox";
 import PopupBody from "../components/PopupBody";
 import SnackbarFeedback from "../components/SnackbarFeedback";
 import BrandForm from "../BrandForm";
-import {getAllBrands} from "../shared/BrandsModule";
+import {getAllResourceName} from "../shared/ResourceNameModule";
 
 //initialize awarding body data
 const initialState = {
@@ -86,7 +85,7 @@ export default function ResourceName() {
 
     //use effect to get data from api
     useEffect(() => {
-        getAllResourceName();
+        getAllResourceName(setResourceName, setLoading);
         getTrashedResourceName();
     }, []);
 
@@ -103,19 +102,6 @@ export default function ResourceName() {
         setOpenEditPopup(true);
     };
 
-    // get all resource name
-    const getAllResourceName = () => {
-        axios
-            .get("/resource_names")
-            .then((res) => {
-                setResourceName(res.data.resource_names);
-
-            })
-            .catch((err) => {
-                console.log(err);
-            });
-    }
-
     //add new resourceName
     const addResourceName = (e, data) => {
         e.preventDefault();
@@ -123,7 +109,7 @@ export default function ResourceName() {
             .post("/resource_names", data)
             .then((res) => {
                 if (res.data.success) {
-                    getAllResourceName();
+                    getAllResourceName(setResourceName, setLoading);
                     setOpenPopup(false);
                     setAddSuccess(true);
                 } else {
@@ -143,7 +129,7 @@ export default function ResourceName() {
             .put("/resource_names/" + selectedResourceName.id, data)
             .then((res) => {
                 if (res.data.success) {
-                    getAllResourceName();
+                    getAllResourceName(setResourceName, setLoading);
                     setOpenEditPopup(false);
                     setUpdateSuccess(true);
                 } else {
@@ -164,7 +150,7 @@ export default function ResourceName() {
                 if (res.data.success) {
                     setOpenDeleteDialogBox(false);
                     getTrashedResourceName();
-                    getAllResourceName();
+                    getAllResourceName(setResourceName, setLoading);
                     setDeleteSuccess(true);
                 } else {
                     setError(true);
@@ -188,7 +174,7 @@ export default function ResourceName() {
             .then((res) => {
                 if (res.data.success) {
                     setOpenRestoreDialogBox(false);
-                    getAllResourceName();
+                    getAllResourceName(setResourceName, setLoading);
                     getTrashedResourceName();
                     setSuccessMessage(res.data.message);
                     setRestoreAllSuccess(true);
@@ -220,7 +206,7 @@ export default function ResourceName() {
         try {
             axios.post("/resource_names/restore/" + id).then((res) => {
                 getTrashedResourceName();
-                getAllResourceName();
+                getAllResourceName(setResourceName, setLoading);
                 setSingleRestoreSuccess(true);
             });
         } catch (error) {
