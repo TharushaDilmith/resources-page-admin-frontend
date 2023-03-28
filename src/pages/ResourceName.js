@@ -184,11 +184,12 @@ export default function ResourceName() {
     //restore brands
     const restoreResourceName = () => {
         axios
-            .post("/brands/restore")
+            .post("/resource_names/restore/")
             .then((res) => {
                 if (res.data.success) {
                     setOpenRestoreDialogBox(false);
-                    getAllBrands(setResourceName,setLoading);
+                    getAllResourceName();
+                    getTrashedResourceName();
                     setSuccessMessage(res.data.message);
                     setRestoreAllSuccess(true);
                 } else {
@@ -217,9 +218,9 @@ export default function ResourceName() {
     //restore single resourceName
     const restoreSingleResourceName = (id) => {
         try {
-            axios.post("/brands/restore/" + id).then((res) => {
+            axios.post("/resource_names/restore/" + id).then((res) => {
                 getTrashedResourceName();
-                getAllBrands(setResourceName,setLoading);
+                getAllResourceName();
                 setSingleRestoreSuccess(true);
             });
         } catch (error) {
