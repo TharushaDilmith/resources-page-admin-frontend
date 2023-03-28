@@ -22,7 +22,8 @@ export default function ResourceTypeForm({
                                              buttonTitle,
                                              formClose,
                                              brands,
-                                             awardingBodies
+                                             awardingBodies,
+                                             resourceNames
                                          }) {
     const [values, setValues] = useState(data);
     const [selectedAwardingBodies, setSelectedAwardingBodies] = useState(awardingBodies);
@@ -30,7 +31,7 @@ export default function ResourceTypeForm({
 
     const handleInputChange = (e) => {
         const {name, value} = e.target;
-        setValues({...values, [name]: value});
+        setValues({...values, resource_type_name: value});
     };
 
     const handleBrandChange = (event) => {
@@ -96,14 +97,36 @@ export default function ResourceTypeForm({
                             }
                         </Select>
                     </FormControl>
-                    <TextField
-                        variant="outlined"
-                        name="resource_type_name"
-                        label="Name"
-                        value={values.resource_type_name}
-                        onChange={handleInputChange}
-                        required={true}
-                    />
+                    {/*<TextField*/}
+                    {/*    variant="outlined"*/}
+                    {/*    name="resource_type_name"*/}
+                    {/*    label="Name"*/}
+                    {/*    value={values.resource_type_name}*/}
+                    {/*    onChange={handleInputChange}*/}
+                    {/*    required={true}*/}
+                    {/*/>*/}
+
+                    {/*add resource name field as dropdown*/}
+                    <FormControl fullWidth required>
+                        <InputLabel
+                            className="MuiFormLabel-root MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-outlined Mui-required Mui-required"
+                            id="resource-name-select-label">
+                            Resource Name</InputLabel>
+                        <Select
+                            labelId="resource-name-select-label"
+                            id="resource-name-select"
+                            variant="outlined"
+                            label="Resource Name"
+                            onChange={handleInputChange}
+                            value={values.resource_type_name}
+                        >
+                            {
+                                resourceNames && resourceNames.length > 0 && resourceNames.map((resourceName) => <MenuItem key={resourceName.id}
+                                                                                                  value={resourceName.name}>{resourceName.name}</MenuItem>)
+                            }
+                        </Select>
+                    </FormControl>
+
                     {/*add validity field as dropdown*/}
                     <FormControl fullWidth required>
                         <InputLabel
