@@ -27,7 +27,7 @@ export default function CourseForm({
                                    }) {
     const [values, setValues] = useState(data);
 
-    const handleInputChnage = (e) => {
+    const handleInputChange = (e) => {
         const {name, value} = e.target;
         setValues({...values, [name]: value});
     };
@@ -53,13 +53,17 @@ export default function CourseForm({
         setValues({...values, course_link: event.target.value});
     }
 
+    const handleResourceTypeChange = (event) => {
+        setValues({...values, resource_type: event.target.value});
+    }
+
 
     const classes = useStyles();
 
     return (
         <form className={classes.root} onSubmit={(e) => onSubmit(e, values)}>
             <Grid container>
-                <Grid item sm={6} md={12}>
+                <Grid item  md={12}>
                     {/*add brands as select field*/}
                     <FormControl fullWidth required>
                         <InputLabel
@@ -114,7 +118,7 @@ export default function CourseForm({
                             id="resource-type-select"
                             variant="outlined"
                             label="Resource Type"
-                            onChange={handleInputChnage}
+                            onChange={handleResourceTypeChange}
                             value={values.resource_type}
                             name="resource_type"
                         >
@@ -173,11 +177,11 @@ export default function CourseForm({
                         name="course_name"
                         label="Name"
                         value={values.course_name}
-                        onChange={handleInputChnage}
+                        onChange={handleInputChange}
                         required={true}
                     />
 
-                    {/*add course url field*/}
+                    {/*/!*add course url field*!/*/}
                     <TextField
                         variant="outlined"
                         name="course_url"
