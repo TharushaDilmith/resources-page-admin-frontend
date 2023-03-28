@@ -9,6 +9,7 @@ import ResourceTypeForm from "../components/ResourceTypeForm";
 import SnackbarFeedback from "../components/SnackbarFeedback";
 import {getAllAwardingBody} from "../shared/AwardingBodyModule";
 import {getAllBrands} from "../shared/BrandsModule";
+import {getAllResourceName} from "../shared/ResourceNameModule";
 
 //initialize resourse type data
 const initialState = {
@@ -22,6 +23,9 @@ const initialState = {
 export default function ResourceType() {
     //use state to store the data
     const [resourceTypes, setResourceTypes] = React.useState([]);
+
+    //use state to store the data
+    const [resourceName, setResourceName] = React.useState([]);
 
     //use state to store deleted resource type
     const [deletedResourceType, setDeletedResourceType] = useState();
@@ -81,6 +85,7 @@ export default function ResourceType() {
         getAllDeletedResourceTypes();
         getAllAwardingBody(setAwardingBody,setLoading);
         getAllBrands(setBrand,setLoading);
+        getAllResourceName(setResourceName, setLoading);
     }, []);
 
     //get all resource types
@@ -343,6 +348,7 @@ export default function ResourceType() {
                         data={initialResourceType}
                         brands={brand}
                         awardingBodies={awardingBody}
+                        resourceNames={resourceName}
                         formClose={() => setOpenPopup(false)}
                         onSubmit={addNewResourceType}
                     />
@@ -357,6 +363,7 @@ export default function ResourceType() {
                         data={selectedResourseType}
                         brands={brand}
                         awardingBodies={awardingBody}
+                        resourceNames={resourceName}
                         formClose={() => setOpenEditPopup(false)}
                         onSubmit={editResourceType}
                     />
