@@ -61,6 +61,13 @@ export default function Layout({ children }) {
               </Link>
             </li>
             <li>
+              <Link to="/resource-name">
+                {" "}
+                <span className="lab la-buffer"></span>
+                <span>Resources Name</span>
+              </Link>
+            </li>
+            <li>
               <Link to="/resources_types">
                 {" "}
                 <span className="lab la-buffer"></span>
