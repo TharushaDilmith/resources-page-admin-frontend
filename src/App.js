@@ -9,6 +9,7 @@ import Course from "./pages/Course";
 import Register from "./pages/Register/Register";
 import Brand from "./pages/Brand";
 import MockExam from "./pages/MockExam";
+import ResourceName from "./pages/ResourceName";
 
 function App() {
   return (
@@ -25,6 +26,7 @@ function App() {
               <Route exact path="/awarding_bodies" component={AwardingBody} />
               <Route exact path="/resources_types" component={ResourceType} />
               <Route exact path="/brands" component={Brand} />
+              <Route exact path="/resource-name" component={ResourceName} />
             </Layout>
           </Switch>
         </section>
