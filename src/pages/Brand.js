@@ -7,7 +7,7 @@ import DetailsBody from "../components/detailsBody/DetailsBody";
 import DialogBox from "../components/DialogBox";
 import PopupBody from "../components/PopupBody";
 import SnackbarFeedback from "../components/SnackbarFeedback";
-import BrandForm from "../components/resourceForm/BrandForm";
+import BrandForm from "../components/BrandForm";
 import {getAllBrands} from "../shared/BrandsModule";
 
 //initialize awarding body data
