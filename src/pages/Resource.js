@@ -8,6 +8,8 @@ import DialogBox from "../components/DialogBox";
 import PopupBody from "../components/PopupBody";
 import ResourceForm from "../components/resourceForm/ResourceForm";
 import SnackbarFeedback from "../components/SnackbarFeedback";
+import {getAllResourceName} from "../shared/ResourceNameModule";
+import {getAllBrands} from "../shared/BrandsModule";
 
 const initialState = {
   resource_name: "",
@@ -71,13 +73,18 @@ export default function Resource() {
   //use state to store the add success
   const [addSuccess, setAddSuccess] = useState(false);
 
+  const [loading, setLoading] = useState(false);
+
+  const [brands, setBrands] = useState([]);
+
   //useEffect
   useEffect(() => {
     getAllresources();
-    getAllResourceTypes();
+    getAllResourceName(setResourceTypes, setLoading);
     getAllAwardingBody();
-    getAllCourses();
+    // getAllCourses();
     getAllDeletedResources();
+    getAllBrands(setBrands, setLoading);
   }, []);
 
   // get all resources
