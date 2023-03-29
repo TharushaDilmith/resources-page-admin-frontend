@@ -112,7 +112,7 @@ export default function ResourceForm({
   const [values, setValues] = useState(data);
   const classes = useStyles();
 
-  const handleInputChnage = (e) => {
+  const handleInputChange = (e) => {
     const { name, value } = e.target;
     setValues({ ...values, [name]: value });
   };
@@ -148,7 +148,7 @@ export default function ResourceForm({
               name="resource_name"
               label="Resource Name"
               value={values.resource_name}
-              onChange={handleInputChnage}
+              onChange={handleInputChange}
               required={true}
             />
             <FormControl variant="outlined">
@@ -157,7 +157,7 @@ export default function ResourceForm({
                 name="awardingbody_id"
                 label="Awarding Body"
                 value={values.awardingbody_id}
-                onChange={handleInputChnage}
+                onChange={handleInputChange}
                 required={true}
               >
                 <MenuItem value="">None</MenuItem>
@@ -174,7 +174,7 @@ export default function ResourceForm({
                 name="resourcetype_id"
                 label="Resources Type"
                 value={values.resourcetype_id}
-                onChange={handleInputChnage}
+                onChange={handleInputChange}
                 required={true}
               >
                 <MenuItem value="">None</MenuItem>
@@ -191,7 +191,7 @@ export default function ResourceForm({
                 name="course_id"
                 label="Course"
                 value={values.course_id}
-                onChange={handleInputChnage}
+                onChange={handleInputChange}
                 required={true}
               >
                 <MenuItem value="">None</MenuItem>
