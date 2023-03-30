@@ -75,7 +75,6 @@ export default function Course() {
     const [loading, setLoading] = useState(false);
     const [brand, setBrand] = React.useState([]);
     const [awardingBody, setAwardingBody] = React.useState([]);
-    const [resourceName, setResourceName] = React.useState([]);
 
     //use effect to get data from the server
     useEffect(() => {
@@ -83,7 +82,6 @@ export default function Course() {
         getAllDeletedCourses();
         getAllBrands(setBrand,setLoading);
         getAllAwardingBody(setAwardingBody,setLoading);
-        getAllResourceName(setResourceName, setLoading);
     }, []);
 
     //get all resource types
@@ -247,12 +245,6 @@ export default function Course() {
             editable: true,
         },
         {
-            field: "resource_type",
-            headerName: "Resource Type",
-            width: 250,
-            editable: true,
-        },
-        {
             field: "course_type",
             headerName: "Course Type",
             width: 250,
@@ -314,12 +306,6 @@ export default function Course() {
         {
             field: "awarding_body_name",
             headerName: "Awarding Body",
-            width: 250,
-            editable: true,
-        },
-        {
-            field: "resource_type",
-            headerName: "Resource Type",
             width: 250,
             editable: true,
         },
@@ -391,7 +377,6 @@ export default function Course() {
                         onSubmit={addNewCourse}
                         brands={brand}
                         awardingBodies={awardingBody}
-                        resourceTypes={resourceName}
 
                     />
                 }
@@ -407,7 +392,6 @@ export default function Course() {
                         onSubmit={editCourse}
                         brands={brand}
                         awardingBodies={awardingBody}
-                        resourceTypes={resourceName}
                     />
                 }
             />
