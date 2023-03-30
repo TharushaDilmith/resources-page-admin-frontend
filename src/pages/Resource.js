@@ -1,4 +1,4 @@
-import {Button, IconButton} from "@material-ui/core";
+import {Box, Button, CircularProgress, IconButton} from "@material-ui/core";
 import {Delete, Edit, GetApp} from "@material-ui/icons";
 import axios from "axios";
 import React, {useEffect, useState} from "react";
@@ -372,16 +372,25 @@ export default function Resource() {
 
     return (
         <div className="resource">
-            <DetailsBody
-                columns={columns}
-                rows={resource}
-                deletedColumns={deletedColumns}
-                deletedRows={deletedResource}
-                button={true}
-                onClick={onClick}
-                restoreButtonText="Restore All"
-                onClickRestore={() => setOpenRestoreDialogBox(true)}
-            />
+
+            {
+                loading ? (
+                    <Box sx={{ display: 'flex',alignContent:'center',justifyContent:'center'}} >
+                        <CircularProgress />
+                    </Box>
+                ):(
+                    <DetailsBody
+                        columns={columns}
+                        rows={resource}
+                        deletedColumns={deletedColumns}
+                        deletedRows={deletedResource}
+                        button={true}
+                        onClick={onClick}
+                        restoreButtonText="Restore All"
+                        onClickRestore={() => setOpenRestoreDialogBox(true)}
+                    />
+                )
+            }
 
             <PopupBody
                 title="Add resource"
