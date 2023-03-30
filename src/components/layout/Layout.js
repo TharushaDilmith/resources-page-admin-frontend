@@ -61,6 +61,13 @@ export default function Layout({ children }) {
               </Link>
             </li>
             <li>
+              <Link to="/courses">
+                {" "}
+                <span className="las la-book-reader"></span>
+                <span>Courses</span>
+              </Link>
+            </li>
+            <li>
               <Link to="/resource-name">
                 {" "}
                 <span className="lab la-buffer"></span>
@@ -72,13 +79,6 @@ export default function Layout({ children }) {
                 {" "}
                 <span className="lab la-buffer"></span>
                 <span>Resources Types</span>
-              </Link>
-            </li>
-            <li>
-              <Link to="/courses">
-                {" "}
-                <span className="las la-book-reader"></span>
-                <span>Courses</span>
               </Link>
             </li>
             <li>
