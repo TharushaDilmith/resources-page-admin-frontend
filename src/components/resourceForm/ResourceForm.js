@@ -43,21 +43,23 @@ export default function ResourceForm({
                                          awardingBodies,
                                          resourceTypes,
                                          course,
+                                         brands,
                                          formClose,
                                      }) {
     const [file, setfile] = useState(null);
     const [open, setOpen] = React.useState(false);
     const [PDFFile, setPDFFile] = useState(null);
+    const [selectedAwardingBodies, setSelectedAwardingBodies] = useState(awardingBodies);
 
 
     //upload file
-    async function uploadImage(image) {
-        // handle image upload
-        if (!image.name.match(/\.(jpg|jpeg|png|gif)$/)) {
-            alert("Select a valid image type");
-            setOpen(false);
-        }
-    }
+    // async function uploadImage(image) {
+    //     // handle image upload
+    //     if (!image.name.match(/\.(jpg|jpeg|png|gif)$/)) {
+    //         alert("Select a valid image type");
+    //         setOpen(false);
+    //     }
+    // }
 
     async function uploadPDF(pdf) {
         if (!pdf.name.match(/\.(pdf)$/)) {
@@ -96,16 +98,25 @@ export default function ResourceForm({
         setValues({...values, [name]: value});
     };
 
-    function onImageSelect(e) {
-        setfile(e.target.files[0]);
+    // function onImageSelect(e) {
+    //     setfile(e.target.files[0]);
+    //
+    //     uploadImage(e.target.files[0]);
+    // }
+    //
+    // function onPDFSelect(e) {
+    //     setPDFFile(e.target.files[0]);
+    //
+    //     uploadPDF(e.target.files[0]);
+    // }
 
-        uploadImage(e.target.files[0]);
-    }
-
-    function onPDFSelect(e) {
-        setPDFFile(e.target.files[0]);
-
-        uploadPDF(e.target.files[0]);
+    const handleBrandChange = (event) => {
+        setValues({...values, brand: event.target.value});
+        // filter awarding bodies based on brand
+        const filteredAwardingBodies = awardingBodies.filter(
+            (item) => item.brand === event.target.value
+        );
+        setSelectedAwardingBodies(filteredAwardingBodies);
     }
 
     return (
@@ -132,6 +143,24 @@ export default function ResourceForm({
                             onChange={handleInputChange}
                             required={true}
                         />
+                        {/*display brand as a drop down*/}
+                        <FormControl variant="outlined">
+                            <InputLabel>Brand</InputLabel>
+                            <MuiSelect
+                                name="brand_id"
+                                label="Brand"
+                                value={values.brand}
+                                onChange={handleBrandChange}
+                                required={true}
+                            >
+                                {brands.map((item) => (
+                                    <MenuItem key={item.id} value={item.id}>
+                                        {item.name}
+                                    </MenuItem>
+                                ))}
+                            </MuiSelect>
+                        </FormControl>
+
                         <FormControl variant="outlined">
                             <InputLabel>Awarding Body</InputLabel>
                             <MuiSelect
@@ -141,8 +170,7 @@ export default function ResourceForm({
                                 onChange={handleInputChange}
                                 required={true}
                             >
-                                <MenuItem value="">None</MenuItem>
-                                {awardingBodies.map((item) => (
+                                {selectedAwardingBodies.map((item) => (
                                     <MenuItem key={item.id} value={item.id}>
                                         {item.awarding_body_name}
                                     </MenuItem>

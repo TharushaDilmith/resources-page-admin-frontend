@@ -10,6 +10,7 @@ import ResourceForm from "../components/resourceForm/ResourceForm";
 import SnackbarFeedback from "../components/SnackbarFeedback";
 import {getAllResourceName} from "../shared/ResourceNameModule";
 import {getAllBrands} from "../shared/BrandsModule";
+import {getAllAwardingBody} from "../shared/AwardingBodyModule";
 
 const initialState = {
     resource_name: "",
@@ -18,6 +19,7 @@ const initialState = {
     resourcetype_id: "",
     awardingbody_id: "",
     course_id: "",
+    brand: "",
 };
 
 export default function Resource() {
@@ -81,7 +83,7 @@ export default function Resource() {
     useEffect(() => {
         getAllresources();
         getAllResourceName(setResourceTypes, setLoading);
-        getAllAwardingBody();
+        getAllAwardingBody(setAwardingBody, setLoading);
         // getAllCourses();
         getAllDeletedResources();
         getAllBrands(setBrands, setLoading);
@@ -112,41 +114,6 @@ export default function Resource() {
             });
     };
 
-    //get all resource types
-    const getAllResourceTypes = () => {
-        axios
-            .get("/resource_types")
-            .then((res) => {
-                setResourceTypes(res.data);
-            })
-            .catch((err) => {
-                console.log(err);
-            });
-    };
-
-    //get all awarding body
-    const getAllAwardingBody = () => {
-        axios
-            .get("/awarding_bodies")
-            .then((res) => {
-                setAwardingBody(res.data);
-            })
-            .catch((err) => {
-                console.log(err);
-            });
-    };
-
-    //get all courses
-    const getAllCourses = () => {
-        axios
-            .get("/courses")
-            .then((res) => {
-                setCourses(res.data);
-            })
-            .catch((err) => {
-                console.log(err);
-            });
-    };
 
     //add resource
     const addResource = (e, resource) => {
@@ -425,6 +392,7 @@ export default function Resource() {
                         awardingBodies={awardingBody}
                         resourceTypes={resourceTypes}
                         course={courses}
+                        brands={brands}
                         formClose={() => setOpenPopup(false)}
                         onSubmit={addResource}
                     />
