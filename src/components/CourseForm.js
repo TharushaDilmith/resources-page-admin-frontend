@@ -23,7 +23,6 @@ export default function CourseForm({
                                        formClose,
                                        brands,
                                        awardingBodies,
-                                       resourceTypes
                                    }) {
     const [values, setValues] = useState(data);
 
@@ -51,10 +50,6 @@ export default function CourseForm({
 
     const handleCourseLinkChange = (event) => {
         setValues({...values, course_link: event.target.value});
-    }
-
-    const handleResourceTypeChange = (event) => {
-        setValues({...values, resource_type: event.target.value});
     }
 
 
@@ -103,29 +98,6 @@ export default function CourseForm({
                             {
                                 awardingBodies && awardingBodies.length > 0 && awardingBodies.map((awardingBody) =>
                                     <MenuItem key={awardingBody.id} value={awardingBody.id}>{awardingBody.awarding_body_name}</MenuItem>)
-                            }
-                        </Select>
-                    </FormControl>
-
-                    {/*add resource types as select field*/}
-                    <FormControl fullWidth required>
-                        <InputLabel
-                            className="MuiFormLabel-root MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-outlined Mui-required Mui-required"
-                            id="resource-type-select-label">
-                            Resource Type</InputLabel>
-                        <Select
-                            labelId="resource-type-select-label"
-                            id="resource-type-select"
-                            variant="outlined"
-                            label="Resource Type"
-                            onChange={handleResourceTypeChange}
-                            value={values.resource_type}
-                            name="resource_type"
-                        >
-
-                            {
-                                resourceTypes && resourceTypes.length > 0 && resourceTypes.map((resourceType) =>
-                                    <MenuItem key={resourceType.id} value={resourceType.id}>{resourceType.name}</MenuItem>)
                             }
                         </Select>
                     </FormControl>
