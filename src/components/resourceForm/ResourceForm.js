@@ -119,6 +119,10 @@ export default function ResourceForm({
         setSelectedAwardingBodies(filteredAwardingBodies);
     }
 
+    const onFileChange = (loadedFiles) => {
+        setValues({...values, resource_file: loadedFiles[0]});
+    }
+
     return (
         <div>
             <form className={classes.root} onSubmit={(e) => onSubmit(e, values)}>
@@ -132,6 +136,7 @@ export default function ResourceForm({
                             previewChipProps={{classes: {root: classes.previewChip}}}
                             previewText="Selected files"
                             maxFileSize={null}
+                            onChange={onFileChange}
                         />
                     </Grid>
                     <Grid item xs={6}>
