@@ -230,6 +230,7 @@ export default function Resource() {
         }
     };
 
+
     //table columns
     const columns = [
         {field: "id", headerName: "ID", width: 100},
