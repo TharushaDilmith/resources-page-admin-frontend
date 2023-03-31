@@ -14,7 +14,8 @@ export default function DetailsBody({
                                         deletedRows,
                                         deletedColumns,
                                         exportButtons = false,
-                                        csvBtn = null
+                                        csvBtn = null,
+                                        downloadReport=null
                                     }) {
 
     //use state to store the selected row
@@ -56,9 +57,9 @@ export default function DetailsBody({
                     </div>
                 )}
                 {
-                    exportButtons && csvBtn &&(<div>
+                    exportButtons && csvBtn && downloadReport &&(<div>
                         {csvBtn()}
-                        <Button variant="contained" color="primary" startIcon={<ArrowCircleDownIcon />}>
+                        <Button onClick={downloadReport} variant="contained" color="primary" startIcon={<ArrowCircleDownIcon />}>
                             Export PDF
                         </Button>
                     </div>)
