@@ -372,6 +372,22 @@ export default function Course() {
         );
     }
 
+    function saveAs(pdfBlob, pdf) {
+        const link = document.createElement('a');
+        link.href = window.URL.createObjectURL(pdfBlob);
+        link.download = pdf;
+        link.click();
+
+    }
+
+    const downloadReport = async () => {
+        const res = await axios.get('/course/report', { responseType: 'arraybuffer'});
+        const pdfBlob = new Blob([res.data], {type: 'application/pdf'});
+
+        saveAs(pdfBlob, 'courses.pdf');
+    }
+
+
 
     return (
         <div className="Course">
@@ -391,6 +407,7 @@ export default function Course() {
                         button={true}
                         exportButtons={true}
                         csvBtn={csvBtn}
+                        downloadReport={downloadReport}
                         restoreButtonText="Restore All"
                         onClickRestore={() => setOpenRestoreDialogBox(true)}
                     />
