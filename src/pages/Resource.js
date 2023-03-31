@@ -81,7 +81,7 @@ export default function Resource() {
 
     //useEffect
     useEffect(() => {
-        getAllresources();
+        getAllResources();
         getAllResourceName(setResourceTypes, setLoading);
         getAllAwardingBody(setAwardingBody, setLoading);
         // getAllCourses();
@@ -90,7 +90,7 @@ export default function Resource() {
     }, []);
 
     // get all resources
-    const getAllresources = () => {
+    const getAllResources = () => {
         axios
             .get("/resources")
             .then((res) => {
@@ -123,7 +123,7 @@ export default function Resource() {
             .post("/resource", resource)
             .then((res) => {
                 if (res.data.success) {
-                    getAllresources();
+                    getAllResources();
                     setOpenPopup(false);
                     setAddSuccess(true);
                 } else {
@@ -144,7 +144,7 @@ export default function Resource() {
             .put(`/resource/${resource.id}`, resource)
             .then((res) => {
                 if (res.data.success) {
-                    getAllresources();
+                    getAllResources();
                     setEditOpenPopup(false);
                     setUpdateSuccess(true);
                 } else {
@@ -170,7 +170,7 @@ export default function Resource() {
             .then((res) => {
                 if (res.data.success) {
                     getAllDeletedResources();
-                    getAllresources();
+                    getAllResources();
                     setOpenDeleteDialogBox(false);
                     setDeleteSuccess(true);
                 } else {
@@ -205,7 +205,7 @@ export default function Resource() {
             .post("/resource/restore")
             .then((res) => {
                 if (res.data.success) {
-                    getAllresources();
+                    getAllResources();
                     setOpenRestoreDialogBox(false);
                 } else {
                     setError(true);
@@ -222,7 +222,7 @@ export default function Resource() {
             axios.post("/resource/restore/" + id).then((res) => {
                 console.log("done");
                 getAllDeletedResources();
-                getAllresources();
+                getAllResources();
                 setSingleRestoreSuccess(true);
             });
         } catch (error) {

@@ -1,6 +1,7 @@
 import {Box, Button, CircularProgress, IconButton} from "@material-ui/core";
 import {Delete, Edit} from "@material-ui/icons";
 import axios from "axios";
+import { CSVLink } from "react-csv";
 import React, {useEffect, useState} from "react";
 import AwardingBodyForm from "../components/AwardingBodyForm";
 import DetailsBody from "../components/detailsBody/DetailsBody";
@@ -9,6 +10,7 @@ import PopupBody from "../components/PopupBody";
 import SnackbarFeedback from "../components/SnackbarFeedback";
 import {getAllBrands} from "../shared/BrandsModule";
 import {getAllAwardingBody} from "../shared/AwardingBodyModule";
+import ArrowCircleDownIcon from "@mui/icons-material/ArrowCircleDown";
 
 //initialize awarding body data
 const initialState = {
@@ -302,8 +304,28 @@ export default function AwardingBody() {
         },
     ];
 
+    const headers = [
+        { label: "id", key: "id" },
+        { label: "awarding_body_name", key: "awarding_body_name" },
+        { label: "brand_name", key: "brand_name" }
+    ];
+
+    const csvBtn = () => {
+        return (
+            <Button variant="contained" color="primary" startIcon={<ArrowCircleDownIcon />} style={{marginRight:'10px'}}>
+                <CSVLink data={awardingBody} headers={headers}>
+                    <p style={{color:'white'}}>Export CSV</p>
+                </CSVLink>
+            </Button>
+        );
+    }
+
+
     return (
+
         <div>
+
+
             {
                 loading ?<Box sx={{ display: 'flex',alignContent:'center',justifyContent:'center'}} >
                     <CircularProgress />
@@ -314,6 +336,8 @@ export default function AwardingBody() {
                     deletedRows={trashedAwardingBody}
                     deletedColumns={deletedAwardingBodyColumns}
                     button={true}
+                    exportButtons={true}
+                    csvBtn={csvBtn}
                     restoreButtonText="Restore All"
                     onClickRestore={onClickRestore}
                 />
