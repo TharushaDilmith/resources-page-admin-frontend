@@ -24,7 +24,6 @@ const initialState = {
 };
 
 
-
 export default function Course() {
     //use state to store the data
     const [courses, setCourses] = React.useState([]);
@@ -80,8 +79,8 @@ export default function Course() {
     useEffect(() => {
         getAllCourses();
         getAllDeletedCourses();
-        getAllBrands(setBrand,setLoading);
-        getAllAwardingBody(setAwardingBody,setLoading);
+        getAllBrands(setBrand, setLoading);
+        getAllAwardingBody(setAwardingBody, setLoading);
     }, []);
 
     //get all resource types
@@ -357,10 +356,10 @@ export default function Course() {
 
             {
                 loading ? (
-                    <Box sx={{ display: 'flex',alignContent:'center',justifyContent:'center'}} >
-                        <CircularProgress />
+                    <Box sx={{display: 'flex', alignContent: 'center', justifyContent: 'center'}}>
+                        <CircularProgress/>
                     </Box>
-                ):(
+                ) : (
                     <DetailsBody
                         onClick={onClickOpenPopup}
                         columns={columns}
