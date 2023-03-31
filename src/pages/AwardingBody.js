@@ -339,8 +339,6 @@ export default function AwardingBody() {
     return (
 
         <div>
-
-
             {
                 loading ?<Box sx={{ display: 'flex',alignContent:'center',justifyContent:'center'}} >
                     <CircularProgress />

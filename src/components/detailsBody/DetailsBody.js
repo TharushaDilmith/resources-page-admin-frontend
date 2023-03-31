@@ -84,7 +84,7 @@ export default function DetailsBody({
                         columns={selectedColumns}
                         pageSize={10}
                         rowsPerPageOptions={[5]}
-                        checkboxSelection
+                        checkboxSelection={false}
                         disableSelectionOnClick
                         // getRowId={(row) => row._id}
                         autoHeight={true}
