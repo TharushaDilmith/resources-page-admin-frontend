@@ -306,18 +306,33 @@ export default function AwardingBody() {
 
     const headers = [
         { label: "id", key: "id" },
-        { label: "awarding_body_name", key: "awarding_body_name" },
-        { label: "brand_name", key: "brand_name" }
+        { label: "Awarding Body", key: "awarding_body_name" },
+        { label: "Brand", key: "brand_name" }
     ];
 
     const csvBtn = () => {
         return (
             <Button variant="contained" color="primary" startIcon={<ArrowCircleDownIcon />} style={{marginRight:'10px'}}>
-                <CSVLink data={awardingBody} headers={headers}>
+                <CSVLink data={awardingBody} headers={headers} filename="Awarding Bodies">
                     <p style={{color:'white'}}>Export CSV</p>
                 </CSVLink>
             </Button>
         );
+    }
+
+    function saveAs(pdfBlob, pdf) {
+        const link = document.createElement('a');
+        link.href = window.URL.createObjectURL(pdfBlob);
+        link.download = pdf;
+        link.click();
+
+    }
+
+    const downloadReport = async () => {
+        const res = await axios.get('/awarding_body/report', { responseType: 'arraybuffer'});
+        const pdfBlob = new Blob([res.data], {type: 'application/pdf'});
+
+        saveAs(pdfBlob, 'awarding_body.pdf');
     }
 
 
@@ -337,6 +352,7 @@ export default function AwardingBody() {
                     deletedColumns={deletedAwardingBodyColumns}
                     button={true}
                     exportButtons={true}
+                    downloadReport={downloadReport}
                     csvBtn={csvBtn}
                     restoreButtonText="Restore All"
                     onClickRestore={onClickRestore}

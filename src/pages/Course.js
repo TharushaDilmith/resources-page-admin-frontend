@@ -10,6 +10,8 @@ import SnackbarFeedback from "../components/SnackbarFeedback";
 import {getAllBrands} from "../shared/BrandsModule";
 import {getAllAwardingBody} from "../shared/AwardingBodyModule";
 import {getAllResourceName} from "../shared/ResourceNameModule";
+import ArrowCircleDownIcon from "@mui/icons-material/ArrowCircleDown";
+import {CSVLink} from "react-csv";
 
 //initialize resourse type data
 const initialState = {
@@ -350,6 +352,26 @@ export default function Course() {
         },
     ];
 
+    const headers = [
+        { label: "id", key: "id" },
+        { label: "Course Name", key: "course_name" },
+        { label: "Brand", key: "brand_name" },
+        { label: "Awarding Body", key: "awarding_body_name" },
+        { label: "Course Link", key: "course_link" },
+        { label: "Course Type", key: "course_type" },
+        { label: "Course Validity", key: "valid" },
+    ];
+
+    const csvBtn = () => {
+        return (
+            <Button variant="contained" color="primary" startIcon={<ArrowCircleDownIcon />} style={{marginRight:'10px'}}>
+                <CSVLink data={courses} headers={headers} filename="Courses">
+                    <p style={{color:'white'}}>Export CSV</p>
+                </CSVLink>
+            </Button>
+        );
+    }
+
 
     return (
         <div className="Course">
@@ -367,6 +389,8 @@ export default function Course() {
                         deletedColumns={deletedColumns}
                         deletedRows={deletedCourse}
                         button={true}
+                        exportButtons={true}
+                        csvBtn={csvBtn}
                         restoreButtonText="Restore All"
                         onClickRestore={() => setOpenRestoreDialogBox(true)}
                     />
