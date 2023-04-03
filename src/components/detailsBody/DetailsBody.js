@@ -3,6 +3,7 @@ import {DataGrid} from "@material-ui/data-grid";
 import "./detailsBody.css";
 import {Button, ButtonGroup} from "@material-ui/core";
 import ArrowCircleDownIcon from '@mui/icons-material/ArrowCircleDown';
+import SearchBar from "material-ui-search-bar";
 
 export default function DetailsBody({
                                         columns,
@@ -15,7 +16,9 @@ export default function DetailsBody({
                                         deletedColumns,
                                         exportButtons = false,
                                         csvBtn = null,
-                                        downloadReport=null
+                                        downloadReport=null,
+                                        searchTerm,
+                                        onSearch,
                                     }) {
 
     //use state to store the selected row
@@ -56,6 +59,12 @@ export default function DetailsBody({
                         </Button>
                     </div>
                 )}
+                <SearchBar
+                    value={searchTerm}
+                    style={{width: "30%"}}
+                    onChange={(newValue) => onSearch(newValue)}
+                    onRequestSearch={() => console.log("onRequestSearch")}
+                />
                 {
                     exportButtons && csvBtn && downloadReport &&(<div>
                         {csvBtn()}
