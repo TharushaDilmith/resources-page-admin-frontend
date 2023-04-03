@@ -79,6 +79,8 @@ export default function Brand() {
 
     const [loading, setLoading] = useState(false);
 
+    const [searchTerm, setSearchTerm] = useState("");
+
     //onclick open popup
     const onClickOpenPopup = () => {
         setOpenPopup(true);
@@ -214,6 +216,30 @@ export default function Brand() {
         }
     };
 
+    const brandsArr = [...brand];
+
+    const onSearch = (keyword) => {
+        setSearchTerm(keyword);
+        console.log(keyword);
+        // filter brands by keyword
+        if (brand.length === 0) setBrand(brandsArr);
+
+        let results = [];
+
+        if (brand.length === 0){
+            results = brandsArr.filter((brand) =>
+                brand.name.toLowerCase().includes(keyword.toLowerCase())
+            );
+        }else{
+            results = brand.filter((brand) =>
+                brand.name.toLowerCase().includes(keyword.toLowerCase())
+            );
+        }
+
+
+        setBrand(results);
+    }
+
     //table columns
     const columns = [
         { field: "id", headerName: "ID", width: 100 },
@@ -298,6 +324,8 @@ export default function Brand() {
                         button={true}
                         restoreButtonText="Restore All"
                         onClickRestore={onClickRestore}
+                        searchTerm={searchTerm}
+                        onSearch={onSearch}
                     />
                 )
             }
