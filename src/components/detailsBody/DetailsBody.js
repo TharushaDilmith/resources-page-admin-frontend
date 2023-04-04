@@ -18,7 +18,10 @@ export default function DetailsBody({
                                         csvBtn = null,
                                         downloadReport=null,
                                         searchTerm,
-                                        onSearch,
+                                        onRequestSearch,
+                                        setSearchTerm,
+                                        onCancelSearch,
+                                        setIsDeletedActive
                                     }) {
 
     //use state to store the selected row
@@ -30,6 +33,7 @@ export default function DetailsBody({
         setSelectedColumns(columns);
         setSelectedRows(rows);
     }
+
     useEffect(() => {
         handleClick();
     }, [columns, rows, deletedColumns, deletedRows]);
@@ -62,8 +66,9 @@ export default function DetailsBody({
                 <SearchBar
                     value={searchTerm}
                     style={{width: "30%"}}
-                    onChange={(newValue) => onSearch(newValue)}
-                    onRequestSearch={() => console.log("onRequestSearch")}
+                    onChange={(newValue) => setSearchTerm(newValue)}
+                    onRequestSearch={onRequestSearch}
+                    onCancelSearch={onCancelSearch}
                 />
                 {
                     exportButtons && csvBtn && downloadReport &&(<div>

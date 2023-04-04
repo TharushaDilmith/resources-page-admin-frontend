@@ -1,7 +1,7 @@
 import {Box, Button, CircularProgress, IconButton} from "@material-ui/core";
-import { Delete, Edit } from "@material-ui/icons";
+import {Delete, Edit} from "@material-ui/icons";
 import axios from "axios";
-import React, { useEffect, useState } from "react";
+import React, {useEffect, useState} from "react";
 import AwardingBodyForm from "../components/AwardingBodyForm";
 import DetailsBody from "../components/detailsBody/DetailsBody";
 import DialogBox from "../components/DialogBox";
@@ -81,6 +81,8 @@ export default function Brand() {
 
     const [searchTerm, setSearchTerm] = useState("");
 
+    const [isDeletedActive, setIsDeletedActive] = useState(false);
+
     //onclick open popup
     const onClickOpenPopup = () => {
         setOpenPopup(true);
@@ -88,7 +90,7 @@ export default function Brand() {
 
     //use effect to get data from api
     useEffect(() => {
-        getAllBrands(setBrand,setLoading);
+        getAllBrands(setBrand, setLoading);
         getTrashedBrands();
     }, []);
 
@@ -112,7 +114,7 @@ export default function Brand() {
             .post("/brands", data)
             .then((res) => {
                 if (res.data.success) {
-                    getAllBrands(setBrand,setLoading);
+                    getAllBrands(setBrand, setLoading);
                     setOpenPopup(false);
                     setAddSuccess(true);
                 } else {
@@ -132,7 +134,7 @@ export default function Brand() {
             .put("/brands/" + selectedBrand.id, data)
             .then((res) => {
                 if (res.data.success) {
-                    getAllBrands(setBrand,setLoading);
+                    getAllBrands(setBrand, setLoading);
                     setOpenEditPopup(false);
                     setUpdateSuccess(true);
                 } else {
@@ -153,7 +155,7 @@ export default function Brand() {
                 if (res.data.success) {
                     setOpenDeleteDialogBox(false);
                     getTrashedBrands();
-                    getAllBrands(setBrand,setLoading);
+                    getAllBrands(setBrand, setLoading);
                     setDeleteSuccess(true);
                 } else {
                     setError(true);
@@ -177,7 +179,7 @@ export default function Brand() {
             .then((res) => {
                 if (res.data.success) {
                     setOpenRestoreDialogBox(false);
-                    getAllBrands(setBrand,setLoading);
+                    getAllBrands(setBrand, setLoading);
                     setSuccessMessage(res.data.message);
                     setRestoreAllSuccess(true);
                 } else {
@@ -208,7 +210,7 @@ export default function Brand() {
         try {
             axios.post("/brands/restore/" + id).then((res) => {
                 getTrashedBrands();
-                getAllBrands(setBrand,setLoading);
+                getAllBrands(setBrand, setLoading);
                 setSingleRestoreSuccess(true);
             });
         } catch (error) {
@@ -216,33 +218,40 @@ export default function Brand() {
         }
     };
 
-    const brandsArr = [...brand];
 
-    const onSearch = (keyword) => {
-        setSearchTerm(keyword);
-        console.log(keyword);
-        // filter brands by keyword
-        if (brand.length === 0) setBrand(brandsArr);
-
-        let results = [];
-
-        if (brand.length === 0){
-            results = brandsArr.filter((brand) =>
-                brand.name.toLowerCase().includes(keyword.toLowerCase())
-            );
-        }else{
-            results = brand.filter((brand) =>
-                brand.name.toLowerCase().includes(keyword.toLowerCase())
-            );
-        }
-
-
-        setBrand(results);
+    const onRequestSearch = () => {
+        // filter brand array by search term
+        // if (isDeletedActive) {
+        //     const filteredBrands = trashedBrand.filter((brand) => {
+        //         return brand.name.toLowerCase().includes(searchTerm.toLowerCase());
+        //     });
+        //     setTrashedBrand(filteredBrands);
+        // }else{
+        //     console.log("is not deleted")
+        //     const filteredBrands = brand.filter((brand) => {
+        //         return brand.name.toLowerCase().includes(searchTerm.toLowerCase());
+        //     });
+        //     setBrand(filteredBrands);
+        // }
+            const trashedBrands = trashedBrand.filter((brand) => {
+                return brand.name.toLowerCase().includes(searchTerm.toLowerCase());
+            });
+            setTrashedBrand(trashedBrands);
+        const filteredBrands = brand.filter((brand) => {
+            return brand.name.toLowerCase().includes(searchTerm.toLowerCase());
+        });
+        setBrand(filteredBrands);
     }
 
-    //table columns
+
+    const onCancelSearch = () => {
+        getAllBrands(setBrand, setLoading);
+        setSearchTerm("");
+    }
+
+//table columns
     const columns = [
-        { field: "id", headerName: "ID", width: 100 },
+        {field: "id", headerName: "ID", width: 100},
         {
             field: "name",
             headerName: "Brand Name",
@@ -260,14 +269,14 @@ export default function Brand() {
                         <Button
                             variant="contained"
                             color="primary"
-                            startIcon={<Edit />}
-                            style={{ marginLeft: "20px", marginRight: "30px" }}
+                            startIcon={<Edit/>}
+                            style={{marginLeft: "20px", marginRight: "30px"}}
                             onClick={() => onClickEdit(params.row)}
                         >
                             Edit
                         </Button>
                         <IconButton onClick={() => onClickDelete(params.row)}>
-                            <Delete color="secondary" />
+                            <Delete color="secondary"/>
                         </IconButton>
                     </>
                 );
@@ -275,9 +284,9 @@ export default function Brand() {
         },
     ];
 
-    //deleted awarding bodies table columns
+//deleted awarding bodies table columns
     const deletedAwardingBodyColumns = [
-        { field: "id", headerName: "ID", width: 100 },
+        {field: "id", headerName: "ID", width: 100},
         {
             field: "name",
             headerName: "Brand Name",
@@ -295,8 +304,8 @@ export default function Brand() {
                         <Button
                             variant="contained"
                             color="secondary"
-                            startIcon={<Edit />}
-                            style={{ marginLeft: "20px", marginRight: "30px" }}
+                            startIcon={<Edit/>}
+                            style={{marginLeft: "20px", marginRight: "30px"}}
                             onClick={() => restoreSingleBrand(params.row.id)}
                         >
                             Restore
@@ -311,10 +320,10 @@ export default function Brand() {
         <div>
             {
                 loading ? (
-                    <Box sx={{ display: 'flex',alignContent:'center',justifyContent:'center'}} >
-                        <CircularProgress />
+                    <Box sx={{display: 'flex', alignContent: 'center', justifyContent: 'center'}}>
+                        <CircularProgress/>
                     </Box>
-                ):(
+                ) : (
                     <DetailsBody
                         onClick={onClickOpenPopup}
                         columns={columns}
@@ -325,7 +334,10 @@ export default function Brand() {
                         restoreButtonText="Restore All"
                         onClickRestore={onClickRestore}
                         searchTerm={searchTerm}
-                        onSearch={onSearch}
+                        onRequestSearch={onRequestSearch}
+                        setSearchTerm={setSearchTerm}
+                        onCancelSearch={onCancelSearch}
+                        setIsDeletedActive={setIsDeletedActive}
                     />
                 )
             }
